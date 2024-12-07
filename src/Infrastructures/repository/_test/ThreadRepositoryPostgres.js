@@ -17,7 +17,6 @@ describe("ThreadRepositoryPostgres", () => {
 
     // Debugging: Cek apakah user berhasil ditambahkan
     const user = await UsersTableTestHelper.findUsersById("user-456");
-    console.log("User found before test:", user);
   });
 
   afterEach(async () => {
@@ -47,7 +46,6 @@ describe("ThreadRepositoryPostgres", () => {
       const usersBeforeThread = await UsersTableTestHelper.findUsersById(
         "user-456"
       );
-      console.log("Users in table before addThread:", usersBeforeThread);
 
       // Action
       await threadRepositoryPostgres.addThread(addThread, usersBeforeThread.id);

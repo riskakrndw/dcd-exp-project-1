@@ -9,7 +9,6 @@ describe("AddThreadUseCase", () => {
     const useCasePayload = {
       title: "New Thread",
       body: "New Thread body",
-      user_id: "user-123",
     };
     const mockAddedThread = {
       id: "thread-123",
@@ -48,7 +47,6 @@ describe("AddThreadUseCase", () => {
       new AddThread({
         title: useCasePayload.title,
         body: useCasePayload.body,
-        user_id: useCasePayload.user_id,
       }),
       "user-123"
     );

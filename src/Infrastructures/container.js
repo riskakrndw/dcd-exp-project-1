@@ -26,7 +26,6 @@ const AuthenticationRepositoryPostgres = require("./repository/AuthenticationRep
 const LogoutUserUseCase = require("../Applications/use_case/LogoutUserUseCase");
 const RefreshAuthenticationUseCase = require("../Applications/use_case/RefreshAuthenticationUseCase");
 const AddThreadUseCase = require("../Applications/use_case/AddThreadUseCase");
-console.log("Resolved AddThreadUseCase:", AddThreadUseCase);
 
 // creating container
 const container = createContainer();
@@ -179,6 +178,10 @@ container.register([
         {
           name: "threadRepository",
           internal: ThreadRepository.name,
+        },
+        {
+          name: "userRepository",
+          internal: UserRepository.name,
         },
       ],
     },

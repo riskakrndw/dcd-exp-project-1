@@ -2,22 +2,22 @@ const AddThread = require("../../Domains/threads/entities/AddThread");
 const AddedThread = require("../../Domains/threads/entities/AddedThread");
 
 class AddThreadUseCase {
-  constructor({ threadRepository }) {
-    console.log("thread uc 1");
+  constructor({ threadRepository, userRepository, user_id }) {
     this._threadRepository = threadRepository;
+    this._userRepository = userRepository;
+    this.user_id = user_id;
   }
 
   async execute(useCasePayload, user_id) {
-    console.log("thread uc 2");
     const addThread = new AddThread(useCasePayload);
-    console.log("thread uc 3");
     const addedThread = await this._threadRepository.addThread(
       addThread,
       user_id
     );
-    console.log("thread uc 4");
 
-    return new AddedThread({ ...addedThread });
+    const user = await this._userRepository.getUser(user_id);
+
+    return new AddedThread({ ...addedThread, owner: user.username });
   }
 }
 

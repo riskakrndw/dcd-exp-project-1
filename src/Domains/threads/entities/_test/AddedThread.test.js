@@ -5,7 +5,6 @@ describe("an AddedThread entities", () => {
     // Arrange
     const payload = {
       title: "Thread Title",
-      user_id: "user-123",
     };
 
     // Action and Assert
@@ -19,7 +18,6 @@ describe("an AddedThread entities", () => {
     const payload = {
       id: 123,
       title: "Thread Title",
-      user_id: "user-123",
     };
 
     // Action and Assert
@@ -33,7 +31,6 @@ describe("an AddedThread entities", () => {
     const payload = {
       id: "thread-123",
       title: "Thread Title",
-      user_id: "user-123",
     };
 
     // Action
@@ -42,6 +39,5 @@ describe("an AddedThread entities", () => {
     // Assert
     expect(addedThread.id).toEqual(payload.id);
     expect(addedThread.title).toEqual(payload.title);
-    expect(addedThread.user_id).toEqual(payload.user_id);
   });
 });
