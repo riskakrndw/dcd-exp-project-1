@@ -1,7 +1,6 @@
 {
   "name": "forum-api",
   "version": "1.0.0",
-  "description": "",
   "main": "index.js",
   "scripts": {
     "start": "node src/app.js",
@@ -15,22 +14,34 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
+  "description": "",
   "dependencies": {
-    "@hapi/hapi": "^20.3.0",
-    "@hapi/jwt": "^2.2.0",
+    "@aws-sdk/client-s3": "^3.645.0",
+    "@aws-sdk/lib-storage": "^3.645.0",
+    "@aws-sdk/s3-request-presigner": "^3.645.0",
+    "@hapi/hapi": "^21.3.10",
+    "@hapi/jwt": "^3.2.0",
+    "@hapi/vision": "^7.0.3",
+    "amqplib": "^0.10.4",
+    "auto-bind": "^4.0.0",
     "bcrypt": "^5.1.1",
-    "dotenv": "^10.0.0",
+    "dotenv": "^16.4.5",
+    "handlebars": "^4.7.8",
     "instances-container": "^2.0.6",
-    "nanoid": "^3.3.8",
-    "pg": "^8.13.1"
+    "ioredis": "^5.4.1",
+    "joi": "^17.13.3",
+    "nanoid": "^3.3.7",
+    "node-pg-migrate": "^7.6.1",
+    "pg": "^8.13.1",
+    "redis": "^4.7.0"
   },
   "devDependencies": {
-    "@types/jest": "^26.0.24",
-    "eslint": "^7.32.0",
-    "eslint-config-airbnb-base": "^14.2.1",
-    "eslint-plugin-import": "^2.23.4",
-    "jest": "^27.5.1",
-    "node-pg-migrate": "^5.10.0",
-    "nodemon": "^2.0.22"
+    "@eslint/js": "^9.10.0",
+    "eslint": "^8.57.0",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-plugin-import": "^2.30.0",
+    "eslint-plugin-react": "^7.35.0",
+    "globals": "^15.9.0",
+    "nodemon": "^3.1.4"
   }
 }
