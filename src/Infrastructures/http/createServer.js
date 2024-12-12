@@ -5,6 +5,7 @@ const DomainErrorTranslator = require("../../Commons/exceptions/DomainErrorTrans
 const users = require("../../Interfaces/http/api/users");
 const authentications = require("../../Interfaces/http/api/authentications");
 const threads = require("../../Interfaces/http/api/threads");
+const comment = require("../../Interfaces/http/api/comments");
 const config = require("../../Commons/config");
 
 const createServer = async (container) => {
@@ -46,6 +47,10 @@ const createServer = async (container) => {
     },
     {
       plugin: threads,
+      options: { container },
+    },
+    {
+      plugin: comment,
       options: { container },
     },
   ]);
