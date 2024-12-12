@@ -1,5 +1,6 @@
 const AddCommentUseCase = require("../../../../Applications/use_case/AddCommentUseCase");
 const autoBind = require("auto-bind");
+const DeleteCommentUseCase = require("../../../../Applications/use_case/DeleteCommentUseCase");
 
 class CommentsHandler {
   constructor(container) {
@@ -35,6 +36,7 @@ class CommentsHandler {
     const { id: ownerId } = request.auth.credentials;
     const { threadId } = request.params;
     const { commentId } = request.params;
+
     const deleteCommentUseCase = this._container.getInstance(
       DeleteCommentUseCase.name
     );

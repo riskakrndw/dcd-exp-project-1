@@ -6,6 +6,10 @@ exports.up = (pgm) => {
       type: "VARCHAR(50)",
       primaryKey: true,
     },
+    user_id: {
+      type: "VARCHAR(50)",
+      primaryKey: true,
+    },
     thread_id: {
       type: "VARCHAR(50)",
       notNull: true,
@@ -38,10 +42,10 @@ exports.up = (pgm) => {
     },
   });
 
-  pgm.addConstraint("comments", "fk_comments.parent_id", {
+  pgm.addConstraint("comments", "fk_comments.users", {
     foreignKeys: {
-      columns: "parent_id",
-      references: "comments(id)",
+      columns: "user_id",
+      references: "users(id)",
       onDelete: "CASCADE",
     },
   });

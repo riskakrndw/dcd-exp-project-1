@@ -30,7 +30,7 @@ describe("AddCommentUseCase", () => {
     const mockUserRepository = new UserRepository();
 
     /** mocking needed function */
-    mockThreadRepository.verifyThread = jest
+    mockThreadRepository.isThreadExist = jest
       .fn()
       .mockImplementation(async () => Promise.resolve());
     mockCommentRepository.addComment = jest
@@ -60,7 +60,7 @@ describe("AddCommentUseCase", () => {
         owner: "testuser",
       })
     );
-    expect(mockThreadRepository.verifyThread).toBeCalledWith(threadId);
+    expect(mockThreadRepository.isThreadExist).toBeCalledWith(threadId);
     expect(mockCommentRepository.addComment).toBeCalledWith(
       new AddComment({
         content: useCasePayload.content,
