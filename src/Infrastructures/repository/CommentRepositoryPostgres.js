@@ -11,7 +11,7 @@ class CommentRepositoryPostgres extends CommentRepository {
   }
 
   async addComment(addComment, thread_id, user_id) {
-    const id = `thread-${this._idGenerator()}`;
+    const id = `comment-${this._idGenerator()}`;
     const date = new Date().toISOString();
 
     const query = {
