@@ -29,7 +29,7 @@ class AddReplyUseCase {
 
     const user = await this._userRepository.getUser(user_id);
 
-    return new AddedReply({ ...addedReply[0], owner: user.username });
+    return new AddedReply({ ...addedReply, owner: user.username });
   }
 }
 

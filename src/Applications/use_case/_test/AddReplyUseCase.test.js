@@ -103,7 +103,7 @@ describe("AddReplyUseCase", () => {
       .mockImplementation(() => Promise.resolve());
     mockReplyRepository.addReply = jest
       .fn()
-      .mockImplementation(() => Promise.resolve([mockAddedReply]));
+      .mockImplementation(() => Promise.resolve(mockAddedReply));
     mockUserRepository.getUser = jest.fn().mockResolvedValue(mockUser);
 
     /** creating use case instance */
@@ -130,6 +130,7 @@ describe("AddReplyUseCase", () => {
         owner: "testuser",
       })
     );
+
     expect(mockThreadRepository.isThreadExist).toBeCalledWith(threadId);
     expect(mockCommentRepository.isCommentExist(commentId));
     expect(mockReplyRepository.addReply).toBeCalledWith(

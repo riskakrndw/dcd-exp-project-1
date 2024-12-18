@@ -11,10 +11,21 @@ class ReplyRepositoryPostgres extends ReplyRepository {
 
   async getReplies(comment_id) {
     const query = {
-      text: `SELECT c.id, c.content, c.user_id, c.is_deleted, u.username
-            FROM comments as c
-            INNER JOIN users as u ON c.user_id = u.id
-            WHERE parent_id = $1`,
+      text: `
+        SELECT 
+          c.id, 
+          CASE
+            WHEN c.is_deleted = TRUE THEN '**balasan telah dihapus**'
+            ELSE c.content
+          END AS content, 
+          c.user_id, 
+          c.is_deleted, u.username, c.date
+        FROM comments as c
+        INNER JOIN users as u ON c.user_id = u.id
+        WHERE 
+          parent_id = $1
+        ORDER BY c.date ASC
+      `,
       values: [comment_id],
     };
 
@@ -45,7 +56,7 @@ class ReplyRepositoryPostgres extends ReplyRepository {
     };
 
     const result = await this._pool.query(query);
-    if (!result.rowCount) {
+    if (result.rows.length === 0) {
       throw new NotFoundError("reply not found");
     }
   }

@@ -67,6 +67,29 @@ class CommentRepositoryPostgres extends CommentRepository {
       throw new AuthorizationError("tidak berhak menghapus komentar");
     }
   }
+
+  async getComments(threadId) {
+    const query = {
+      text: `
+        SELECT 
+          c.id, c.user_id, 
+          CASE 
+            WHEN c.is_deleted = TRUE THEN '**komentar telah dihapus**'
+            ELSE c.content
+          END AS content, 
+          c.is_deleted, u.username, c.date
+        FROM comments as c
+        INNER JOIN users as u ON c.user_id = u.id
+        WHERE 
+          c.thread_id = $1
+          AND c.parent_id IS NULL  
+      `,
+      values: [threadId],
+    };
+
+    const { rows } = await this._pool.query(query);
+    return rows;
+  }
 }
 
 module.exports = CommentRepositoryPostgres;
