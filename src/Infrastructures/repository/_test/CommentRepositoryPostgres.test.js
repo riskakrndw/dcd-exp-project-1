@@ -27,9 +27,8 @@ describe("CommentRepositoryPostgres", () => {
       id: "thread-123",
       title: "New Thread 123",
       body: "New thread body 123.",
-      owner: "user-123",
-      created_at: "2024-06-10T17:14:31.573Z",
-      updated_at: "2024-06-10T17:14:31.573Z",
+      user_id: "user-123",
+      date: "2024-06-10T17:14:31.573Z",
     });
   });
 
@@ -42,6 +41,87 @@ describe("CommentRepositoryPostgres", () => {
   afterAll(async () => {
     // await UsersTableTestHelper.cleanTable();
     await pool.end();
+  });
+
+  describe("addComment function", () => {
+    it("should persist add comment", async () => {
+      // Arrange
+      const addComment = new AddComment({ content: "New Comment" });
+      const fakeIdGenerator = () => "456";
+      const commentRepositoryPostgres = new CommentRepositoryPostgres(
+        pool,
+        fakeIdGenerator
+      );
+
+      // Action
+      await commentRepositoryPostgres.addComment(
+        addComment,
+        "thread-123",
+        "user-456"
+      );
+
+      // Assert
+      const comment = await CommentsTableTestHelper.findCommentById(
+        "comment-456"
+      );
+
+      expect(comment).toHaveLength(1);
+      expect(comment[0].id).toBe("comment-456");
+      expect(comment[0].content).toBe("New Comment");
+      expect(comment[0].user_id).toBe("user-456");
+    });
+  });
+
+  describe("getComment function", () => {
+    it("should return the correct comment", async () => {
+      // Arrange
+      const commentRepositoryPostgres = new CommentRepositoryPostgres(pool, {});
+      await CommentsTableTestHelper.addComment({
+        id: "comment-789",
+        content: "This is a comment",
+        thread: "thread-123",
+        user_id: "user-123",
+        is_deleted: false,
+        date: "2024-05-10T17:15:31.573Z",
+      });
+
+      // Action
+      const result = await commentRepositoryPostgres.getComment("comment-789");
+
+      // Assert
+      expect(result).toHaveLength(1);
+      expect(result[0].id).toBe("comment-789");
+      expect(result[0].content).toBe("This is a comment");
+    });
+  });
+
+  describe("deleteComment", () => {
+    it("should persist delete comment", async () => {
+      // Arrange
+      const addComment = new AddComment({
+        content: "New Comment will be deleted",
+      });
+      const fakeIdGenerator = () => "456";
+      const commentRepositoryPostgres = new CommentRepositoryPostgres(
+        pool,
+        fakeIdGenerator
+      );
+      await commentRepositoryPostgres.addComment(
+        addComment,
+        "thread-123",
+        "user-456"
+      );
+
+      // Action
+      await commentRepositoryPostgres.deleteComment("comment-456");
+
+      // Assert
+      const commentDeleted = await CommentsTableTestHelper.findCommentById(
+        "comment-456"
+      );
+
+      expect(commentDeleted[0].is_deleted).toEqual(true);
+    });
   });
 
   describe("isCommentExist function", () => {
@@ -102,10 +182,9 @@ describe("CommentRepositoryPostgres", () => {
         id: "comment-123",
         content: "New Comment from user-456",
         thread: "thread-123",
-        owner: "user-123",
+        user_id: "user-123",
         is_deleted: false,
-        created_at: "2024-05-10T17:15:31.573Z",
-        updated_at: "2024-05-10T17:15:31.573Z",
+        date: "2024-05-10T17:15:31.573Z",
       });
 
       // Assert
@@ -123,10 +202,9 @@ describe("CommentRepositoryPostgres", () => {
         id: "comment-123",
         content: "New Comment from user-456",
         thread: "thread-123",
-        owner: "user-123",
+        user_id: "user-123",
         is_deleted: false,
-        created_at: "2024-05-10T17:15:31.573Z",
-        updated_at: "2024-05-10T17:15:31.573Z",
+        date: "2024-05-10T17:15:31.573Z",
       });
 
       // Assert
@@ -138,62 +216,36 @@ describe("CommentRepositoryPostgres", () => {
     });
   });
 
-  describe("addComment function", () => {
-    it("should persist add comment", async () => {
+  describe("getComments function", () => {
+    it("should return all comments of a thread", async () => {
       // Arrange
-      const addComment = new AddComment({ content: "New Comment" });
-      const fakeIdGenerator = () => "456";
-      const commentRepositoryPostgres = new CommentRepositoryPostgres(
-        pool,
-        fakeIdGenerator
-      );
-
-      // Action
-      await commentRepositoryPostgres.addComment(
-        addComment,
-        "thread-123",
-        "user-456"
-      );
-
-      // Assert
-      const comment = await CommentsTableTestHelper.findCommentById(
-        "comment-456"
-      );
-
-      console.log("comment===", comment);
-      expect(comment).toHaveLength(1);
-      expect(comment[0].id).toBe("comment-456");
-      expect(comment[0].content).toBe("New Comment");
-      expect(comment[0].user_id).toBe("user-456");
-    });
-  });
-
-  describe("deleteComment", () => {
-    it("should persist delete comment", async () => {
-      // Arrange
-      const addComment = new AddComment({
-        content: "New Comment will be deleted",
+      const commentRepositoryPostgres = new CommentRepositoryPostgres(pool, {});
+      await CommentsTableTestHelper.addComment({
+        id: "comment-111",
+        content: "Comment 1",
+        thread_id: "thread-123",
+        user_id: "user-123",
+        is_deleted: false,
+        date: "2024-05-10T17:15:31.573Z",
       });
-      const fakeIdGenerator = () => "456";
-      const commentRepositoryPostgres = new CommentRepositoryPostgres(
-        pool,
-        fakeIdGenerator
-      );
-      await commentRepositoryPostgres.addComment(
-        addComment,
-        "thread-123",
-        "user-456"
-      );
+      await CommentsTableTestHelper.addComment({
+        id: "comment-222",
+        content: "Comment 2",
+        thread_id: "thread-123",
+        user_id: "user-456",
+        is_deleted: false,
+        date: "2024-05-10T18:15:31.573Z",
+      });
 
       // Action
-      await commentRepositoryPostgres.deleteComment("comment-456");
-
-      // Assert
-      const commentDeleted = await CommentsTableTestHelper.findCommentById(
-        "comment-456"
+      const comments = await commentRepositoryPostgres.getComments(
+        "thread-123"
       );
 
-      expect(commentDeleted[0].is_deleted).toEqual(true);
+      // Assert
+      expect(comments).toHaveLength(2);
+      expect(comments[0].id).toBe("comment-111");
+      expect(comments[1].id).toBe("comment-222");
     });
   });
 });
