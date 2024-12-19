@@ -1,4 +1,3 @@
-const AddedComment = require("../../Domains/comments/entities/AddedComment");
 const CommentRepository = require("../../Domains/comments/CommentRepository");
 const NotFoundError = require("../../Commons/exceptions/NotFoundError");
 const AuthorizationError = require("../../Commons/exceptions/AuthorizationError");
