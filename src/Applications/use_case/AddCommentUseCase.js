@@ -1,5 +1,6 @@
 const AddComment = require("../../Domains/comments/entities/AddComment");
 const AddedComment = require("../../Domains/comments/entities/AddedComment");
+const NotFoundError = require("../../Commons/exceptions/NotFoundError");
 
 class AddCommentUseCase {
   constructor({ threadRepository, commentRepository, userRepository }) {
