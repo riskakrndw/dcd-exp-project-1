@@ -17,9 +17,5 @@ describe("ThreadRepository interface", () => {
     await expect(threadRepository.isThreadExist({})).rejects.toThrowError(
       "THREAD_REPOSITORY.METHOD_NOT_IMPLEMENTED"
     );
-
-    await expect(threadRepository.isCommentByOwner({})).rejects.toThrowError(
-      "THREAD_REPOSITORY.METHOD_NOT_IMPLEMENTED"
-    );
   });
 });

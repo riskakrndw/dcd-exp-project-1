@@ -47,7 +47,7 @@ describe("GetThreadUseCase", () => {
         username: "johndoe",
         date: new Date("2021-08-08T07:22:33.555Z"),
         content: "sebuah komentar",
-        is_delete: false,
+        is_deleted: false,
       },
     ];
 
@@ -57,7 +57,7 @@ describe("GetThreadUseCase", () => {
         content: "sebuah balasan",
         date: new Date("2021-08-08T08:07:01.522Z"),
         username: "dicoding",
-        is_delete: false,
+        is_deleted: false,
       },
     ];
 
@@ -131,7 +131,7 @@ describe("GetThreadUseCase", () => {
         username: "johndoe",
         date: new Date("2021-08-08T07:22:33.555Z"),
         content: "",
-        is_delete: true,
+        is_deleted: true,
       },
     ];
 
@@ -141,7 +141,7 @@ describe("GetThreadUseCase", () => {
         content: "",
         date: new Date("2021-08-08T08:07:01.522Z"),
         username: "dicoding",
-        is_delete: true,
+        is_deleted: true,
       },
     ];
 

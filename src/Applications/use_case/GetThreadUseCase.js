@@ -23,7 +23,7 @@ class GetThreadUseCase {
       return replies.length > 0
         ? replies.map((reply) => ({
             id: reply.id,
-            content: reply.is_delete
+            content: reply.is_deleted
               ? "**balasan telah dihapus**"
               : reply.content,
             date: reply.date ? new Date(reply.date).toISOString() : null,
@@ -38,7 +38,7 @@ class GetThreadUseCase {
           id: comment.id,
           username: comment.username,
           date: new Date(comment.date).toISOString(),
-          content: comment.is_delete
+          content: comment.is_deleted
             ? "**komentar telah dihapus**"
             : comment.content,
           replies: await getReplies(comment.id),

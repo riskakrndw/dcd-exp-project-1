@@ -14,12 +14,11 @@ class ReplyRepositoryPostgres extends ReplyRepository {
       text: `
         SELECT 
           c.id, 
-          CASE
-            WHEN c.is_deleted = TRUE THEN '**balasan telah dihapus**'
-            ELSE c.content
-          END AS content, 
+          c.content,
           c.user_id, 
-          c.is_deleted, u.username, c.date
+          c.is_deleted, 
+          u.username, 
+          c.date
         FROM comments as c
         INNER JOIN users as u ON c.user_id = u.id
         WHERE 

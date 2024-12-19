@@ -72,12 +72,12 @@ class CommentRepositoryPostgres extends CommentRepository {
     const query = {
       text: `
         SELECT 
-          c.id, c.user_id, 
-          CASE 
-            WHEN c.is_deleted = TRUE THEN '**komentar telah dihapus**'
-            ELSE c.content
-          END AS content, 
-          c.is_deleted, u.username, c.date
+          c.id, 
+          c.user_id, 
+          c.content,
+          c.is_deleted, 
+          u.username, 
+          c.date
         FROM comments as c
         INNER JOIN users as u ON c.user_id = u.id
         WHERE 

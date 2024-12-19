@@ -1,9 +1,9 @@
 class UserRepository {
-  async addUser(registerUser) {
+  async verifyAvailableUsername(username) {
     throw new Error("USER_REPOSITORY.METHOD_NOT_IMPLEMENTED");
   }
 
-  async verifyAvailableUsername(username) {
+  async addUser(registerUser) {
     throw new Error("USER_REPOSITORY.METHOD_NOT_IMPLEMENTED");
   }
 

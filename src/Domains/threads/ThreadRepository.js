@@ -1,5 +1,5 @@
 class ThreadRepository {
-  async addThread(addThread) {
+  async addThread(addThread, user_id) {
     throw new Error("THREAD_REPOSITORY.METHOD_NOT_IMPLEMENTED");
   }
 
@@ -8,10 +8,6 @@ class ThreadRepository {
   }
 
   async isThreadExist(threadId) {
-    throw new Error("THREAD_REPOSITORY.METHOD_NOT_IMPLEMENTED");
-  }
-
-  async isCommentByOwner(ownerId, commentId) {
     throw new Error("THREAD_REPOSITORY.METHOD_NOT_IMPLEMENTED");
   }
 }
