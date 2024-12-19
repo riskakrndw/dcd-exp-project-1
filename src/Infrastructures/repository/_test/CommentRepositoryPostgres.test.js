@@ -18,9 +18,9 @@ describe("CommentRepositoryPostgres", () => {
 
     await UsersTableTestHelper.addUser({
       id: "user-456",
-      username: "fakhry",
+      username: "dicoding2",
       password: "rahasia",
-      fullname: "Fakhry Dicoding",
+      fullname: "Dicoding Academy",
     });
 
     await ThreadsTableTestHelper.addThread({
