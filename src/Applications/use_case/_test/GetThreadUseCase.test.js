@@ -7,6 +7,7 @@ const NotFoundError = require("../../../Commons/exceptions/NotFoundError");
 const UserRepository = require("../../../Domains/users/UserRepository");
 
 const AddCommentUseCase = require("../AddCommentUseCase");
+const { date } = require("joi");
 
 describe("GetThreadUseCase", () => {
   it("should throw NotFoundError when thread is not found", async () => {
@@ -47,10 +48,11 @@ describe("GetThreadUseCase", () => {
     const mockComments = [
       {
         id: commentId,
-        username: "johndoe",
-        date: new Date("2021-08-08T07:22:33.555Z"),
+        user_id: "user-123",
         content: "sebuah komentar",
         is_deleted: false,
+        username: "johndoe",
+        date: new Date("2021-08-08T07:22:33.555Z"),
       },
     ];
 
@@ -144,10 +146,11 @@ describe("GetThreadUseCase", () => {
     const mockComments = [
       {
         id: commentId,
-        username: "johndoe",
-        date: new Date("2021-08-08T07:22:33.555Z"),
+        user_id: "user-123",
         content: "sebuah komentar",
         is_deleted: false,
+        username: "johndoe",
+        date: new Date("2021-08-08T07:22:33.555Z"),
       },
     ];
 
@@ -213,10 +216,11 @@ describe("GetThreadUseCase", () => {
     const mockComments = [
       {
         id: commentId,
-        username: "johndoe",
-        date: new Date("2021-08-08T07:22:33.555Z"),
+        user_id: "user-123",
         content: "",
         is_deleted: true,
+        username: "johndoe",
+        date: new Date("2021-08-08T07:22:33.555Z"),
       },
     ];
 
