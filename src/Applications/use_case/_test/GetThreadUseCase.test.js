@@ -56,9 +56,16 @@ describe("GetThreadUseCase", () => {
 
     const mockReplies = [
       {
-        id: "reply-xNBtm9HPR-492AeiimpfN",
+        id: "reply-1",
         content: "sebuah balasan",
         date: new Date("2021-08-08T08:07:01.522Z"),
+        username: "dicoding",
+        is_deleted: false,
+      },
+      {
+        id: "reply-2",
+        content: "sebuah balasan",
+        date: null,
         username: "dicoding",
         is_deleted: false,
       },
@@ -99,12 +106,87 @@ describe("GetThreadUseCase", () => {
             content: "sebuah komentar",
             replies: [
               {
-                id: "reply-xNBtm9HPR-492AeiimpfN",
+                id: "reply-1",
                 content: "sebuah balasan",
                 date: "2021-08-08T08:07:01.522Z",
                 username: "dicoding",
               },
+              {
+                id: "reply-2",
+                content: "sebuah balasan",
+                date: null,
+                username: "dicoding",
+              },
             ],
+          },
+        ],
+      })
+    );
+
+    expect(mockThreadRepository.getThread).toBeCalledWith(threadId);
+    expect(mockCommentRepository.getComments).toBeCalledWith(threadId);
+    expect(mockReplyRepository.getReplies).toBeCalledWith(commentId);
+  });
+
+  it("should get thread despite no reply in comment", async () => {
+    // Arrange
+    const threadId = "thread-h_2FkLZhtgBKY2kh4CC02";
+    const commentId = "comment-_pby2_tmXV6bcvcdev8xk";
+
+    const mockThread = {
+      id: threadId,
+      title: "sebuah thread",
+      body: "sebuah body thread",
+      date: new Date("2021-08-08T07:19:09.775Z"),
+      username: "dicoding",
+    };
+
+    const mockComments = [
+      {
+        id: commentId,
+        username: "johndoe",
+        date: new Date("2021-08-08T07:22:33.555Z"),
+        content: "sebuah komentar",
+        is_deleted: false,
+      },
+    ];
+
+    const mockReplies = [];
+
+    const mockThreadRepository = new ThreadRepository();
+    const mockCommentRepository = new CommentRepository();
+    const mockReplyRepository = new ReplyRepository();
+
+    mockThreadRepository.getThread = jest.fn().mockResolvedValue([mockThread]);
+    mockCommentRepository.getComments = jest
+      .fn()
+      .mockResolvedValue(mockComments);
+    mockReplyRepository.getReplies = jest.fn().mockResolvedValue(mockReplies);
+
+    const getThreadUseCase = new GetThreadUseCase({
+      threadRepository: mockThreadRepository,
+      commentRepository: mockCommentRepository,
+      replyRepository: mockReplyRepository,
+    });
+
+    // Act
+    const result = await getThreadUseCase.execute(threadId);
+
+    // Assert
+    expect(result).toStrictEqual(
+      new CommentedThread({
+        id: threadId,
+        title: "sebuah thread",
+        body: "sebuah body thread",
+        date: "2021-08-08T07:19:09.775Z",
+        username: "dicoding",
+        comments: [
+          {
+            id: commentId,
+            username: "johndoe",
+            date: "2021-08-08T07:22:33.555Z",
+            content: "sebuah komentar",
+            replies: [],
           },
         ],
       })
@@ -140,7 +222,7 @@ describe("GetThreadUseCase", () => {
 
     const mockReplies = [
       {
-        id: "reply-xNBtm9HPR-492AeiimpfN",
+        id: "reply-1",
         content: "",
         date: new Date("2021-08-08T08:07:01.522Z"),
         username: "dicoding",
@@ -183,7 +265,7 @@ describe("GetThreadUseCase", () => {
             content: "**komentar telah dihapus**",
             replies: [
               {
-                id: "reply-xNBtm9HPR-492AeiimpfN",
+                id: "reply-1",
                 content: "**balasan telah dihapus**",
                 date: "2021-08-08T08:07:01.522Z",
                 username: "dicoding",

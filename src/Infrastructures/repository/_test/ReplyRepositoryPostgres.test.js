@@ -116,14 +116,13 @@ describe("ReplyRepositoryPostgres", () => {
       const replyRepositoryPostgres = new ReplyRepositoryPostgres(pool, {});
 
       // Action
-      await RepliesTableTestHelper.addReply({
+      reply = await RepliesTableTestHelper.addReply({
         id: "reply-008",
+        user_id: "user-123",
+        thread_id: "thread-123",
+        parent_id: "comment-456",
         content: "New Reply",
-        comment: "comment-456",
-        owner: "user-123",
-        is_delete: false,
-        created_at: "2024-05-10T17:15:31.573Z",
-        updated_at: "2024-05-10T17:15:31.573Z",
+        date: "2024-05-10T17:15:31.573Z",
       });
 
       // Action
@@ -139,12 +138,11 @@ describe("ReplyRepositoryPostgres", () => {
       // Action
       await RepliesTableTestHelper.addReply({
         id: "reply-008",
+        user_id: "user-123",
+        thread_id: "thread-123",
+        parent_id: "comment-456",
         content: "New Reply",
-        comment: "comment-456",
-        owner: "user-123",
-        is_delete: false,
-        created_at: "2024-05-10T17:15:31.573Z",
-        updated_at: "2024-05-10T17:15:31.573Z",
+        date: "2024-05-10T17:15:31.573Z",
       });
 
       // Action
@@ -162,12 +160,11 @@ describe("ReplyRepositoryPostgres", () => {
       // Action
       await RepliesTableTestHelper.addReply({
         id: "reply-008",
+        user_id: "user-123",
+        thread_id: "thread-123",
+        parent_id: "comment-456",
         content: "New Reply",
-        comment: "comment-456",
-        owner: "user-123",
-        is_delete: false,
-        created_at: "2024-05-10T17:15:31.573Z",
-        updated_at: "2024-05-10T17:15:31.573Z",
+        date: "2024-05-10T17:15:31.573Z",
       });
 
       // Action
@@ -183,12 +180,11 @@ describe("ReplyRepositoryPostgres", () => {
       // Action
       await RepliesTableTestHelper.addReply({
         id: "reply-008",
+        user_id: "user-123",
+        thread_id: "thread-123",
+        parent_id: "comment-456",
         content: "New Reply",
-        comment: "comment-456",
-        owner: "user-123",
-        is_delete: false,
-        created_at: "2024-05-10T17:15:31.573Z",
-        updated_at: "2024-05-10T17:15:31.573Z",
+        date: "2024-05-10T17:15:31.573Z",
       });
 
       // Action

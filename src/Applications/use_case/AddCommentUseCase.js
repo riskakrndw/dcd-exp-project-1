@@ -1,6 +1,5 @@
 const AddComment = require("../../Domains/comments/entities/AddComment");
 const AddedComment = require("../../Domains/comments/entities/AddedComment");
-const NotFoundError = require("../../Commons/exceptions/NotFoundError");
 
 class AddCommentUseCase {
   constructor({ threadRepository, commentRepository, userRepository }) {
@@ -10,10 +9,6 @@ class AddCommentUseCase {
   }
 
   async execute(useCasePayload, threadId, user_id) {
-    if (!threadId) {
-      throw new NotFoundError("threadId not found.");
-    }
-
     const addComment = new AddComment(useCasePayload);
 
     await this._threadRepository.isThreadExist(threadId);
