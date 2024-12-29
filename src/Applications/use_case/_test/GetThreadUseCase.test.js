@@ -102,9 +102,9 @@ describe("GetThreadUseCase", () => {
       })
     );
 
-    expect(mockThreadRepository.getThread).toBeCalledWith(threadId);
-    expect(mockCommentRepository.getComments).toBeCalledWith(threadId);
-    expect(mockReplyRepository.getReplies).toBeCalledWith(commentId);
+    expect(mockThreadRepository.getThread).toHaveBeenCalledWith(threadId);
+    expect(mockCommentRepository.getComments).toHaveBeenCalledWith(threadId);
+    expect(mockReplyRepository.getReplies).toHaveBeenCalledWith(commentId);
   });
 
   it("should get thread despite no reply in comment", async () => {
@@ -172,9 +172,9 @@ describe("GetThreadUseCase", () => {
       })
     );
 
-    expect(mockThreadRepository.getThread).toBeCalledWith(threadId);
-    expect(mockCommentRepository.getComments).toBeCalledWith(threadId);
-    expect(mockReplyRepository.getReplies).toBeCalledWith(commentId);
+    expect(mockThreadRepository.getThread).toHaveBeenCalledWith(threadId);
+    expect(mockCommentRepository.getComments).toHaveBeenCalledWith(threadId);
+    expect(mockReplyRepository.getReplies).toHaveBeenCalledWith(commentId);
   });
 
   it("should return thread with deleted comments and replies properly formatted", async () => {
@@ -257,9 +257,9 @@ describe("GetThreadUseCase", () => {
       })
     );
 
-    expect(mockThreadRepository.getThread).toBeCalledWith(threadId);
-    expect(mockCommentRepository.getComments).toBeCalledWith(threadId);
-    expect(mockReplyRepository.getReplies).toBeCalledWith(commentId);
+    expect(mockThreadRepository.getThread).toHaveBeenCalledWith(threadId);
+    expect(mockCommentRepository.getComments).toHaveBeenCalledWith(threadId);
+    expect(mockReplyRepository.getReplies).toHaveBeenCalledWith(commentId);
   });
 
   it("should throw an error when processing thread fails", async () => {
@@ -305,8 +305,8 @@ describe("GetThreadUseCase", () => {
     );
 
     // Verify methods are called correctly
-    expect(mockThreadRepository.getThread).toBeCalledWith(threadId);
-    expect(mockCommentRepository.getComments).toBeCalledWith(threadId);
-    expect(mockReplyRepository.getReplies).toBeCalledWith("comment-123");
+    expect(mockThreadRepository.getThread).toHaveBeenCalledWith(threadId);
+    expect(mockCommentRepository.getComments).toHaveBeenCalledWith(threadId);
+    expect(mockReplyRepository.getReplies).toHaveBeenCalledWith("comment-123");
   });
 });

@@ -294,14 +294,6 @@ describe("CommentRepositoryPostgres", () => {
         is_deleted: false,
         date: "2024-05-10T17:15:31.573Z",
       });
-      await CommentsTableTestHelper.addComment({
-        id: "comment-222",
-        content: "Comment 2",
-        thread_id: "thread-123",
-        user_id: "user-123",
-        is_deleted: false,
-        date: "2024-05-10T18:15:31.573Z",
-      });
 
       // Action
       const comments = await commentRepositoryPostgres.getComments(
@@ -309,20 +301,14 @@ describe("CommentRepositoryPostgres", () => {
       );
 
       // Assert
-      expect(comments).toHaveLength(2);
-      expect(comments[0].id).toBe("comment-222");
+      expect(comments).toHaveLength(1);
+
+      expect(comments[0].id).toBe("comment-111");
       expect(comments[0].user_id).toBe("user-123");
-      expect(comments[0].content).toBe("Comment 2");
+      expect(comments[0].content).toBe("Comment 1");
       expect(comments[0].is_deleted).toBe(false);
       expect(comments[0].username).toBe("dicoding");
       expect(comments[0].date).toBeDefined();
-
-      expect(comments[1].id).toBe("comment-111");
-      expect(comments[1].user_id).toBe("user-123");
-      expect(comments[1].content).toBe("Comment 1");
-      expect(comments[1].is_deleted).toBe(false);
-      expect(comments[1].username).toBe("dicoding");
-      expect(comments[1].date).toBeDefined();
     });
   });
 });

@@ -8,20 +8,16 @@ const AuthorizationError = require("../../../Commons/exceptions/AuthorizationErr
 describe("DeleteReplyUseCase", () => {
   it("should throw error when thread not found", async () => {
     // Arrange
-    /** creating dependency of use case */
     const mockThreadRepository = new ThreadRepository();
-
-    /** mocking needed function */
     mockThreadRepository.isThreadExist = jest.fn().mockImplementation(() => {
       throw new NotFoundError("thread tidak ditemukan");
     });
 
-    /** creating use case */
     const deleteReplyUseCase = new DeleteReplyUseCase({
       threadRepository: mockThreadRepository,
     });
 
-    // Action
+    // Action & Assert
     await expect(
       deleteReplyUseCase.execute(
         "user-123",
@@ -30,16 +26,17 @@ describe("DeleteReplyUseCase", () => {
         "reply-123"
       )
     ).rejects.toThrowError("thread tidak ditemukan");
+
+    expect(mockThreadRepository.isThreadExist).toHaveBeenCalledWith(
+      "thread-123"
+    );
   });
 
   it("should throw error when comment not found", async () => {
     // Arrange
-    /** creating dependency of use case */
     const mockThreadRepository = new ThreadRepository();
     const mockCommentRepository = new CommentRepository();
-    // const mockReplyRepository = new ReplyRepository();
 
-    /** mocking needed function */
     mockThreadRepository.isThreadExist = jest
       .fn()
       .mockImplementation(() => Promise.resolve());
@@ -47,10 +44,8 @@ describe("DeleteReplyUseCase", () => {
       throw new NotFoundError("komentar tidak ditemukan");
     });
 
-    /** creating use case */
     const deleteReplyUseCase = new DeleteReplyUseCase({
       threadRepository: mockThreadRepository,
-      // replyRepository: mockReplyRepository,
       commentRepository: mockCommentRepository,
     });
 
@@ -63,6 +58,13 @@ describe("DeleteReplyUseCase", () => {
         "reply-123"
       )
     ).rejects.toThrowError("komentar tidak ditemukan");
+
+    expect(mockThreadRepository.isThreadExist).toHaveBeenCalledWith(
+      "thread-123"
+    );
+    expect(mockCommentRepository.isCommentExist).toHaveBeenCalledWith(
+      "comment-123"
+    );
   });
 
   it("should throw error when reply not found", async () => {
@@ -99,6 +101,14 @@ describe("DeleteReplyUseCase", () => {
         "reply-123"
       )
     ).rejects.toThrowError("balasan tidak ditemukan");
+
+    expect(mockThreadRepository.isThreadExist).toHaveBeenCalledWith(
+      "thread-123"
+    );
+    expect(mockCommentRepository.isCommentExist).toHaveBeenCalledWith(
+      "comment-123"
+    );
+    expect(mockReplyRepository.isReplyExist).toHaveBeenCalledWith("reply-123");
   });
 
   it("should throw error when user have no rights", async () => {
@@ -138,6 +148,18 @@ describe("DeleteReplyUseCase", () => {
         "reply-123"
       )
     ).rejects.toThrowError("tidak berhak menghapus balasan");
+
+    expect(mockThreadRepository.isThreadExist).toHaveBeenCalledWith(
+      "thread-123"
+    );
+    expect(mockCommentRepository.isCommentExist).toHaveBeenCalledWith(
+      "comment-123"
+    );
+    expect(mockReplyRepository.isReplyExist).toHaveBeenCalledWith("reply-123");
+    expect(mockReplyRepository.isOwnerReplied).toHaveBeenCalledWith(
+      "user-123",
+      "reply-123"
+    );
   });
 
   it("should orchestrating the delete reply action correctly", async () => {

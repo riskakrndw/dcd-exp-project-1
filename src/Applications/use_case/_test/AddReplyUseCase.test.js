@@ -35,7 +35,9 @@ describe("AddReplyUseCase", () => {
 
     // Verifikasi fungsi mock
     expect(mockThreadRepository.isThreadExist).toBeCalledTimes(1);
-    expect(mockThreadRepository.isThreadExist).toBeCalledWith("thread-123");
+    expect(mockThreadRepository.isThreadExist).toHaveBeenCalledWith(
+      "thread-123"
+    );
   });
 
   it("should throw error when comment not available", async () => {
@@ -68,9 +70,13 @@ describe("AddReplyUseCase", () => {
 
     // Verifikasi fungsi mock
     expect(mockThreadRepository.isThreadExist).toBeCalledTimes(1);
-    expect(mockThreadRepository.isThreadExist).toBeCalledWith("thread-123");
+    expect(mockThreadRepository.isThreadExist).toHaveBeenCalledWith(
+      "thread-123"
+    );
     expect(mockCommentRepository.isCommentExist).toBeCalledTimes(1);
-    expect(mockCommentRepository.isCommentExist).toBeCalledWith("comment-123");
+    expect(mockCommentRepository.isCommentExist).toHaveBeenCalledWith(
+      "comment-123"
+    );
   });
 
   it("should orchestrating the add reply action correctly", async () => {
@@ -130,17 +136,19 @@ describe("AddReplyUseCase", () => {
 
     // Verifikasi fungsi mock
     expect(mockThreadRepository.isThreadExist).toBeCalledTimes(1);
-    expect(mockThreadRepository.isThreadExist).toBeCalledWith(threadId);
+    expect(mockThreadRepository.isThreadExist).toHaveBeenCalledWith(threadId);
     expect(mockCommentRepository.isCommentExist).toBeCalledTimes(1);
-    expect(mockCommentRepository.isCommentExist).toBeCalledWith(commentId);
+    expect(mockCommentRepository.isCommentExist).toHaveBeenCalledWith(
+      commentId
+    );
     expect(mockReplyRepository.addReply).toBeCalledTimes(1);
-    expect(mockReplyRepository.addReply).toBeCalledWith(
+    expect(mockReplyRepository.addReply).toHaveBeenCalledWith(
       new AddReply({ content: useCasePayload.content }),
       threadId,
       commentId,
       ownerId
     );
     expect(mockUserRepository.getUser).toBeCalledTimes(1);
-    expect(mockUserRepository.getUser).toBeCalledWith(ownerId);
+    expect(mockUserRepository.getUser).toHaveBeenCalledWith(ownerId);
   });
 });

@@ -60,7 +60,7 @@ describe("AddThreadUseCase", () => {
       })
     );
 
-    expect(mockThreadRepository.addThread).toBeCalledWith(
+    expect(mockThreadRepository.addThread).toHaveBeenCalledWith(
       new AddThread({
         title: useCasePayload.title,
         body: useCasePayload.body,
@@ -68,6 +68,6 @@ describe("AddThreadUseCase", () => {
       "user-123"
     );
 
-    expect(mockUserRepository.getUser).toBeCalledWith("user-123");
+    expect(mockUserRepository.getUser).toHaveBeenCalledWith("user-123");
   });
 });
