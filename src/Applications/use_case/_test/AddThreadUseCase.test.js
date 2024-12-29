@@ -6,17 +6,21 @@ const AddThreadUseCase = require("../AddThreadUseCase");
 const { password } = require("pg/lib/defaults");
 
 describe("AddThreadUseCase", () => {
-  it("should orchestrating the add thread action correctly", async () => {
+  it("should orchestrate the add thread action correctly", async () => {
     // Arrange
     const useCasePayload = {
       title: "New Thread",
       body: "New Thread body",
     };
+
     const mockAddedThread = {
       id: "thread-123",
-      title: useCasePayload.title,
       user_id: "user-123",
+      title: useCasePayload.title,
+      body: useCasePayload.body,
+      date: "2021-08-08T07:19:09.775Z",
     };
+
     const mockUser = {
       id: "user-123",
       username: "testuser",
@@ -31,17 +35,17 @@ describe("AddThreadUseCase", () => {
     /** mocking needed function */
     mockThreadRepository.addThread = jest
       .fn()
-      .mockImplementation(() => Promise.resolve(mockAddedThread));
+      .mockResolvedValue(mockAddedThread);
     mockUserRepository.getUser = jest.fn().mockResolvedValue(mockUser);
 
     /** creating use case instance */
-    const getThreadUseCase = new AddThreadUseCase({
+    const addThreadUseCase = new AddThreadUseCase({
       threadRepository: mockThreadRepository,
       userRepository: mockUserRepository,
     });
 
     // Action
-    const addedThread = await getThreadUseCase.execute(
+    const addedThread = await addThreadUseCase.execute(
       useCasePayload,
       "user-123"
     );
@@ -55,6 +59,7 @@ describe("AddThreadUseCase", () => {
         owner: "testuser",
       })
     );
+
     expect(mockThreadRepository.addThread).toBeCalledWith(
       new AddThread({
         title: useCasePayload.title,
@@ -62,6 +67,7 @@ describe("AddThreadUseCase", () => {
       }),
       "user-123"
     );
+
     expect(mockUserRepository.getUser).toBeCalledWith("user-123");
   });
 });

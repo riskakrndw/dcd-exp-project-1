@@ -62,8 +62,11 @@ describe("CommentRepositoryPostgres", () => {
 
       // Assert
       expect(createdComment.id).toBe("comment-456");
-      expect(createdComment.content).toBe("New Comment");
       expect(createdComment.user_id).toBe("user-456");
+      expect(createdComment.thread_id).toBe("thread-123");
+      expect(createdComment.content).toBe("New Comment");
+      expect(createdComment.date).toBeDefined();
+      expect(createdComment.is_deleted).toBe(false);
 
       const comment = await CommentsTableTestHelper.findCommentById(
         "comment-456"
@@ -71,8 +74,11 @@ describe("CommentRepositoryPostgres", () => {
 
       expect(comment).toHaveLength(1);
       expect(comment[0].id).toBe("comment-456");
-      expect(comment[0].content).toBe("New Comment");
       expect(comment[0].user_id).toBe("user-456");
+      expect(comment[0].thread_id).toBe("thread-123");
+      expect(comment[0].content).toBe("New Comment");
+      expect(comment[0].date).toBeDefined();
+      expect(comment[0].is_deleted).toBe(false);
     });
   });
 
@@ -87,11 +93,20 @@ describe("CommentRepositoryPostgres", () => {
         pool,
         fakeIdGenerator
       );
-      await commentRepositoryPostgres.addComment(
+
+      const createdComment = await commentRepositoryPostgres.addComment(
         addComment,
         "thread-123",
         "user-456"
       );
+
+      // Assert
+      expect(createdComment.id).toBe("comment-456");
+      expect(createdComment.user_id).toBe("user-456");
+      expect(createdComment.thread_id).toBe("thread-123");
+      expect(createdComment.content).toBe("New Comment will be deleted");
+      expect(createdComment.date).toBeDefined();
+      expect(createdComment.is_deleted).toBe(false);
 
       // Action
       await commentRepositoryPostgres.deleteComment("comment-456");
@@ -116,11 +131,19 @@ describe("CommentRepositoryPostgres", () => {
       );
 
       // Action
-      await commentRepositoryPostgres.addComment(
+      const createdComment = await commentRepositoryPostgres.addComment(
         addComment,
         "thread-123",
         "user-123"
       );
+
+      // Assert
+      expect(createdComment.id).toBe("comment-123");
+      expect(createdComment.user_id).toBe("user-123");
+      expect(createdComment.thread_id).toBe("thread-123");
+      expect(createdComment.content).toBe("New Comment");
+      expect(createdComment.date).toBeDefined();
+      expect(createdComment.is_deleted).toBe(false);
 
       // Assert
       const isCommentExist = async () =>
@@ -140,11 +163,19 @@ describe("CommentRepositoryPostgres", () => {
       );
 
       // Action
-      await commentRepositoryPostgres.addComment(
+      const createdComment = await commentRepositoryPostgres.addComment(
         addComment,
         "thread-123",
         "user-123"
       );
+
+      // Assert
+      expect(createdComment.id).toBe("comment-123");
+      expect(createdComment.user_id).toBe("user-123");
+      expect(createdComment.thread_id).toBe("thread-123");
+      expect(createdComment.content).toBe("New Comment");
+      expect(createdComment.date).toBeDefined();
+      expect(createdComment.is_deleted).toBe(false);
 
       // Assert
       await expect(
