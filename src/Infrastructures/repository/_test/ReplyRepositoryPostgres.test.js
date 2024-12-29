@@ -158,9 +158,15 @@ describe("ReplyRepositoryPostgres", () => {
       });
 
       // Action
-      await expect(
-        replyRepositoryPostgres.isReplyExist("reply-008")
-      ).resolves.not.toThrowError(new NotFoundError("reply not found"));
+      const result = await replyRepositoryPostgres.isReplyExist("reply-008");
+
+      // Assert
+      expect(result.id).toBe("reply-008");
+      expect(result.content).toBe("New Reply");
+      expect(result.user_id).toBe("user-123");
+      expect(result.thread_id).toBe("thread-123");
+      expect(result.parent_id).toBe("comment-456");
+      expect(result.date).toBeDefined();
     });
   });
 
@@ -200,11 +206,18 @@ describe("ReplyRepositoryPostgres", () => {
       });
 
       // Action
-      await expect(
-        replyRepositoryPostgres.isOwnerReplied("user-123", "reply-008")
-      ).resolves.not.toThrowError(
-        new AuthorizationError("tidak berhak menghapus balasan")
+      const result = await replyRepositoryPostgres.isOwnerReplied(
+        "user-123",
+        "reply-008"
       );
+
+      // Assert
+      expect(result.id).toBe("reply-008");
+      expect(result.content).toBe("New Reply");
+      expect(result.user_id).toBe("user-123");
+      expect(result.thread_id).toBe("thread-123");
+      expect(result.parent_id).toBe("comment-456");
+      expect(result.date).toBeDefined();
     });
   });
 
@@ -232,8 +245,11 @@ describe("ReplyRepositoryPostgres", () => {
       expect(createdReply.content).toBe("New Reply");
       expect(createdReply.date).toBeDefined();
 
-      const result = await replyRepositoryPostgres.deleteReply("comment-xxx");
-      await expect(result.rowCount).toEqual(0);
+      await expect(
+        replyRepositoryPostgres.deleteReply("comment-xxxx")
+      ).rejects.toThrowError(
+        new Error("Failed to delete reply. Reply not found.")
+      );
     });
 
     it("should persist delete reply", async () => {
@@ -252,7 +268,7 @@ describe("ReplyRepositoryPostgres", () => {
       );
 
       // Action
-      await replyRepositoryPostgres.deleteReply("comment-789");
+      const result = await replyRepositoryPostgres.deleteReply("comment-123");
 
       // Assert
       expect(createdReply.id).toBe("comment-123");
@@ -262,11 +278,12 @@ describe("ReplyRepositoryPostgres", () => {
       expect(createdReply.content).toBe("New Reply");
       expect(createdReply.date).toBeDefined();
 
-      const replyDeleted = await RepliesTableTestHelper.findReplyById(
-        "comment-789"
-      );
-
-      expect(replyDeleted[0].is_deleted).toEqual(true);
+      expect(result.id).toBe("comment-123");
+      expect(result.user_id).toBe("user-123");
+      expect(result.thread_id).toBe("thread-123");
+      expect(result.parent_id).toBe("comment-456");
+      expect(result.content).toBe("New Reply");
+      expect(result.date).toBeDefined();
     });
   });
 });

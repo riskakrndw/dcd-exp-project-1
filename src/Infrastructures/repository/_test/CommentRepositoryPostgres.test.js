@@ -83,6 +83,39 @@ describe("CommentRepositoryPostgres", () => {
   });
 
   describe("deleteComment", () => {
+    it("should throw error when comment not found", async () => {
+      // Arrange
+      const addComment = new AddComment({
+        content: "New Comment will be deleted",
+      });
+      const fakeIdGenerator = () => "456";
+      const commentRepositoryPostgres = new CommentRepositoryPostgres(
+        pool,
+        fakeIdGenerator
+      );
+
+      const createdComment = await commentRepositoryPostgres.addComment(
+        addComment,
+        "thread-123",
+        "user-456"
+      );
+
+      // Assert
+      expect(createdComment.id).toBe("comment-456");
+      expect(createdComment.user_id).toBe("user-456");
+      expect(createdComment.thread_id).toBe("thread-123");
+      expect(createdComment.content).toBe("New Comment will be deleted");
+      expect(createdComment.date).toBeDefined();
+      expect(createdComment.is_deleted).toBe(false);
+
+      // Assert
+      await expect(
+        commentRepositoryPostgres.deleteComment("comment-123")
+      ).rejects.toThrowError(
+        new AuthorizationError("Failed to delete comment. Comment not found.")
+      );
+    });
+
     it("should persist delete comment", async () => {
       // Arrange
       const addComment = new AddComment({
@@ -109,9 +142,18 @@ describe("CommentRepositoryPostgres", () => {
       expect(createdComment.is_deleted).toBe(false);
 
       // Action
-      await commentRepositoryPostgres.deleteComment("comment-456");
+      const result = await commentRepositoryPostgres.deleteComment(
+        "comment-456"
+      );
 
       // Assert
+      expect(result.id).toBe("comment-456");
+      expect(result.user_id).toBe("user-456");
+      expect(result.thread_id).toBe("thread-123");
+      expect(result.content).toBe("New Comment will be deleted");
+      expect(result.date).toBeDefined();
+      expect(result.is_deleted).toBe(true);
+
       const commentDeleted = await CommentsTableTestHelper.findCommentById(
         "comment-456"
       );
@@ -177,12 +219,17 @@ describe("CommentRepositoryPostgres", () => {
       expect(createdComment.date).toBeDefined();
       expect(createdComment.is_deleted).toBe(false);
 
-      // Assert
-      await expect(
-        commentRepositoryPostgres.isCommentExist("comment-123")
-      ).resolves.not.toThrowError(
-        new NotFoundError("komentar tidak ditemukan")
+      const result = await commentRepositoryPostgres.isCommentExist(
+        "comment-123"
       );
+
+      // Assert
+      expect(result.id).toBe("comment-123");
+      expect(result.user_id).toBe("user-123");
+      expect(result.thread_id).toBe("thread-123");
+      expect(result.content).toBe("New Comment");
+      expect(result.date).toBeDefined();
+      expect(result.is_deleted).toBe(false);
     });
   });
 
@@ -219,12 +266,19 @@ describe("CommentRepositoryPostgres", () => {
         date: "2024-05-10T17:15:31.573Z",
       });
 
-      // Assert
-      await expect(
-        commentRepositoryPostgres.isCommentByOwner("user-123", "comment-123")
-      ).resolves.not.toThrowError(
-        new AuthorizationError("tidak berhak menghapus komentar")
+      // Action
+      const result = await commentRepositoryPostgres.isCommentByOwner(
+        "user-123",
+        "comment-123"
       );
+
+      // Assert
+      expect(result.id).toBe("comment-123");
+      expect(result.user_id).toBe("user-123");
+      expect(result.thread_id).toBe("thread-123");
+      expect(result.content).toBe("New Comment from user-456");
+      expect(result.date).toBeDefined();
+      expect(result.is_deleted).toBe(false);
     });
   });
 

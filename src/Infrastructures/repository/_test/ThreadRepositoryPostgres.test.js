@@ -123,18 +123,19 @@ describe("ThreadRepositoryPostgres", () => {
       await ThreadsTableTestHelper.addThread({
         id: "thread-123",
         title: "New Thread 123",
-        body: "New thread body 123.",
+        body: "New thread body 123",
         user_id: "user-456",
       });
 
       // Action
-      const isThreadExist = async () =>
-        threadRepositoryPostgres.isThreadExist("thread-123");
+      const result = await threadRepositoryPostgres.isThreadExist("thread-123");
 
       // Assert
-      await expect(isThreadExist).not.toThrowError(
-        new NotFoundError("thread not found")
-      );
+      await expect(result.id).toBe("thread-123");
+      await expect(result.user_id).toBe("user-456");
+      await expect(result.title).toBe("New Thread 123");
+      await expect(result.body).toBe("New thread body 123");
+      await expect(result.date).toBeDefined();
     });
   });
 });

@@ -55,14 +55,17 @@ class ReplyRepositoryPostgres extends ReplyRepository {
     };
 
     const result = await this._pool.query(query);
+
     if (result.rows.length === 0) {
       throw new NotFoundError("reply not found");
     }
+
+    return result.rows[0];
   }
 
   async isOwnerReplied(user_id, reply_id) {
     const query = {
-      text: "SELECT 1 FROM comments WHERE id = $1 AND user_id = $2",
+      text: "SELECT * FROM comments WHERE id = $1 AND user_id = $2",
       values: [reply_id, user_id],
     };
 
@@ -70,15 +73,23 @@ class ReplyRepositoryPostgres extends ReplyRepository {
     if (!result.rowCount) {
       throw new AuthorizationError("cant delete reply");
     }
+
+    return result.rows[0];
   }
 
   async deleteReply(reply_id) {
     const query = {
-      text: "UPDATE comments SET is_deleted = TRUE WHERE id = $1",
+      text: "UPDATE comments SET is_deleted = TRUE WHERE id = $1 RETURNING id, user_id, thread_id, parent_id, content, date",
       values: [reply_id],
     };
 
-    return this._pool.query(query);
+    const result = await this._pool.query(query);
+
+    if (!result.rowCount) {
+      throw new Error("Failed to delete reply. Reply not found.");
+    }
+
+    return result.rows[0];
   }
 }
 
