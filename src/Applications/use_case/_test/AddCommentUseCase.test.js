@@ -15,8 +15,11 @@ describe("AddCommentUseCase", () => {
     const ownerId = "user-123";
     const mockAddedComment = {
       id: "comment-123",
+      user_id: "user-123",
+      thread_id: "thread-123",
       content: useCasePayload.content,
-      owner: "user-123",
+      date: new Date(),
+      is_deleted: false,
     };
     const mockUser = {
       id: "user-123",
