@@ -13,18 +13,16 @@ describe("AddReplyUseCase", () => {
     const useCasePayload = {
       content: "New reply",
     };
-    /** creating dependency of use case */
+
     const mockThreadRepository = new ThreadRepository();
-    /** mocking needed function */
     mockThreadRepository.isThreadExist = jest
       .fn()
-      .mockImplementation(async () => {
-        throw new NotFoundError("thread tidak ditemukan");
-      });
-    /** creating use case instance */
+      .mockRejectedValue(new NotFoundError("thread tidak ditemukan"));
+
     const addReplyUseCase = new AddReplyUseCase({
       threadRepository: mockThreadRepository,
     });
+
     // Action & Assert
     await expect(
       addReplyUseCase.execute(
@@ -34,6 +32,10 @@ describe("AddReplyUseCase", () => {
         "user-123"
       )
     ).rejects.toThrowError("thread tidak ditemukan");
+
+    // Verifikasi fungsi mock
+    expect(mockThreadRepository.isThreadExist).toBeCalledTimes(1);
+    expect(mockThreadRepository.isThreadExist).toBeCalledWith("thread-123");
   });
 
   it("should throw error when comment not available", async () => {
@@ -41,24 +43,19 @@ describe("AddReplyUseCase", () => {
     const useCasePayload = {
       content: "New reply",
     };
-    /** creating dependency of use case */
+
     const mockThreadRepository = new ThreadRepository();
     const mockCommentRepository = new CommentRepository();
-    // const mockReplyRepository = new ReplyRepository();
-    /** mocking needed function */
-    mockThreadRepository.isThreadExist = jest
-      .fn()
-      .mockImplementation(async () => Promise.resolve());
+    mockThreadRepository.isThreadExist = jest.fn().mockResolvedValue();
     mockCommentRepository.isCommentExist = jest
       .fn()
-      .mockImplementation(async () => {
-        throw new NotFoundError("komentar tidak ditemukan");
-      });
-    /** creating use case instance */
+      .mockRejectedValue(new NotFoundError("komentar tidak ditemukan"));
+
     const addReplyUseCase = new AddReplyUseCase({
       threadRepository: mockThreadRepository,
       commentRepository: mockCommentRepository,
     });
+
     // Action & Assert
     await expect(
       addReplyUseCase.execute(
@@ -68,6 +65,12 @@ describe("AddReplyUseCase", () => {
         "user-123"
       )
     ).rejects.toThrowError("komentar tidak ditemukan");
+
+    // Verifikasi fungsi mock
+    expect(mockThreadRepository.isThreadExist).toBeCalledTimes(1);
+    expect(mockThreadRepository.isThreadExist).toBeCalledWith("thread-123");
+    expect(mockCommentRepository.isCommentExist).toBeCalledTimes(1);
+    expect(mockCommentRepository.isCommentExist).toBeCalledWith("comment-123");
   });
 
   it("should orchestrating the add reply action correctly", async () => {
@@ -78,6 +81,7 @@ describe("AddReplyUseCase", () => {
     const threadId = "thread-123";
     const commentId = "comment-123";
     const ownerId = "user-123";
+
     const mockAddedReply = new AddedReply({
       id: "reply-123",
       content: useCasePayload.content,
@@ -86,27 +90,20 @@ describe("AddReplyUseCase", () => {
     const mockUser = {
       id: "user-123",
       username: "testuser",
+      password: "secret",
+      fullname: "testuser",
     };
 
-    /** creating dependency of use case */
     const mockThreadRepository = new ThreadRepository();
     const mockCommentRepository = new CommentRepository();
     const mockReplyRepository = new ReplyRepository();
     const mockUserRepository = new UserRepository();
 
-    /** mocking needed function */
-    mockThreadRepository.isThreadExist = jest
-      .fn()
-      .mockImplementation(() => Promise.resolve());
-    mockCommentRepository.isCommentExist = jest
-      .fn()
-      .mockImplementation(() => Promise.resolve());
-    mockReplyRepository.addReply = jest
-      .fn()
-      .mockImplementation(() => Promise.resolve(mockAddedReply));
+    mockThreadRepository.isThreadExist = jest.fn().mockResolvedValue();
+    mockCommentRepository.isCommentExist = jest.fn().mockResolvedValue();
+    mockReplyRepository.addReply = jest.fn().mockResolvedValue(mockAddedReply);
     mockUserRepository.getUser = jest.fn().mockResolvedValue(mockUser);
 
-    /** creating use case instance */
     const addReplyUseCase = new AddReplyUseCase({
       threadRepository: mockThreadRepository,
       commentRepository: mockCommentRepository,
@@ -122,7 +119,7 @@ describe("AddReplyUseCase", () => {
       ownerId
     );
 
-    // Assert
+    // Assert hasil
     expect(addedReply).toStrictEqual(
       new AddedReply({
         id: "reply-123",
@@ -131,15 +128,19 @@ describe("AddReplyUseCase", () => {
       })
     );
 
+    // Verifikasi fungsi mock
+    expect(mockThreadRepository.isThreadExist).toBeCalledTimes(1);
     expect(mockThreadRepository.isThreadExist).toBeCalledWith(threadId);
-    expect(mockCommentRepository.isCommentExist(commentId));
+    expect(mockCommentRepository.isCommentExist).toBeCalledTimes(1);
+    expect(mockCommentRepository.isCommentExist).toBeCalledWith(commentId);
+    expect(mockReplyRepository.addReply).toBeCalledTimes(1);
     expect(mockReplyRepository.addReply).toBeCalledWith(
-      new AddReply({
-        content: useCasePayload.content,
-      }),
-      "thread-123",
-      "comment-123",
-      "user-123"
+      new AddReply({ content: useCasePayload.content }),
+      threadId,
+      commentId,
+      ownerId
     );
+    expect(mockUserRepository.getUser).toBeCalledTimes(1);
+    expect(mockUserRepository.getUser).toBeCalledWith(ownerId);
   });
 });

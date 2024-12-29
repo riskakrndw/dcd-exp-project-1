@@ -3,6 +3,7 @@ const AddedThread = require("../../../Domains/threads/entities/AddedThread");
 const ThreadRepository = require("../../../Domains/threads/ThreadRepository");
 const UserRepository = require("../../../Domains/users/UserRepository");
 const AddThreadUseCase = require("../AddThreadUseCase");
+const { password } = require("pg/lib/defaults");
 
 describe("AddThreadUseCase", () => {
   it("should orchestrating the add thread action correctly", async () => {
@@ -19,6 +20,8 @@ describe("AddThreadUseCase", () => {
     const mockUser = {
       id: "user-123",
       username: "testuser",
+      password: "secret",
+      fullname: "testuser",
     };
 
     /** creating dependency of use case */

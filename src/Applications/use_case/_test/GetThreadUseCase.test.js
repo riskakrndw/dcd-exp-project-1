@@ -3,35 +3,8 @@ const ThreadRepository = require("../../../Domains/threads/ThreadRepository");
 const GetThreadUseCase = require("../GetThreadUseCase");
 const CommentRepository = require("../../../Domains/comments/CommentRepository");
 const ReplyRepository = require("../../../Domains/replies/ReplyRepository");
-const NotFoundError = require("../../../Commons/exceptions/NotFoundError");
-const UserRepository = require("../../../Domains/users/UserRepository");
-
-const AddCommentUseCase = require("../AddCommentUseCase");
-const { date } = require("joi");
 
 describe("GetThreadUseCase", () => {
-  it("should throw NotFoundError when thread is not found", async () => {
-    // Arrange
-    const mockThreadRepository = new ThreadRepository();
-    const mockCommentRepository = new CommentRepository();
-    const mockReplyRepository = new ReplyRepository();
-
-    mockThreadRepository.getThread = jest.fn().mockResolvedValue([]);
-    const getThreadUseCase = new GetThreadUseCase({
-      threadRepository: mockThreadRepository,
-      commentRepository: mockCommentRepository,
-      replyRepository: mockReplyRepository,
-    });
-
-    // Act & Assert
-    await expect(
-      getThreadUseCase.execute("nonexistent-thread-id")
-    ).rejects.toThrowError(NotFoundError);
-    expect(mockThreadRepository.getThread).toBeCalledWith(
-      "nonexistent-thread-id"
-    );
-  });
-
   it("should orchestrate the get thread action correctly", async () => {
     // Arrange
     const threadId = "thread-h_2FkLZhtgBKY2kh4CC02";
@@ -77,11 +50,15 @@ describe("GetThreadUseCase", () => {
     const mockCommentRepository = new CommentRepository();
     const mockReplyRepository = new ReplyRepository();
 
-    mockThreadRepository.getThread = jest.fn().mockResolvedValue([mockThread]);
+    mockThreadRepository.getThread = jest
+      .fn()
+      .mockImplementation(() => Promise.resolve([mockThread]));
     mockCommentRepository.getComments = jest
       .fn()
-      .mockResolvedValue(mockComments);
-    mockReplyRepository.getReplies = jest.fn().mockResolvedValue(mockReplies);
+      .mockImplementation(() => Promise.resolve(mockComments));
+    mockReplyRepository.getReplies = jest
+      .fn()
+      .mockImplementation(() => Promise.resolve(mockReplies));
 
     const getThreadUseCase = new GetThreadUseCase({
       threadRepository: mockThreadRepository,
@@ -283,33 +260,6 @@ describe("GetThreadUseCase", () => {
     expect(mockThreadRepository.getThread).toBeCalledWith(threadId);
     expect(mockCommentRepository.getComments).toBeCalledWith(threadId);
     expect(mockReplyRepository.getReplies).toBeCalledWith(commentId);
-  });
-
-  it("should throw NotFoundError when threadId is not found", async () => {
-    // Arrange
-    const mockThreadRepository = new ThreadRepository();
-    const mockCommentRepository = new CommentRepository();
-    const mockUserRepository = new UserRepository();
-
-    mockThreadRepository.isThreadExist = jest
-      .fn()
-      .mockRejectedValue(new NotFoundError("Thread tidak ditemukan"));
-
-    const addCommentUseCase = new AddCommentUseCase({
-      threadRepository: mockThreadRepository,
-      commentRepository: mockCommentRepository,
-      userRepository: mockUserRepository,
-    });
-
-    // Act & Assert
-    await expect(
-      addCommentUseCase.execute(
-        { content: "komentar" },
-        "thread-123",
-        "user-123"
-      )
-    ).rejects.toThrow(NotFoundError);
-    expect(mockThreadRepository.isThreadExist).toBeCalledWith("thread-123");
   });
 
   it("should throw an error when processing thread fails", async () => {

@@ -54,13 +54,17 @@ describe("CommentRepositoryPostgres", () => {
       );
 
       // Action
-      await commentRepositoryPostgres.addComment(
+      const createdComment = await commentRepositoryPostgres.addComment(
         addComment,
         "thread-123",
         "user-456"
       );
 
       // Assert
+      expect(createdComment.id).toBe("comment-456");
+      expect(createdComment.content).toBe("New Comment");
+      expect(createdComment.user_id).toBe("user-456");
+
       const comment = await CommentsTableTestHelper.findCommentById(
         "comment-456"
       );
@@ -69,29 +73,6 @@ describe("CommentRepositoryPostgres", () => {
       expect(comment[0].id).toBe("comment-456");
       expect(comment[0].content).toBe("New Comment");
       expect(comment[0].user_id).toBe("user-456");
-    });
-  });
-
-  describe("getComment function", () => {
-    it("should return the correct comment", async () => {
-      // Arrange
-      const commentRepositoryPostgres = new CommentRepositoryPostgres(pool, {});
-      await CommentsTableTestHelper.addComment({
-        id: "comment-789",
-        content: "This is a comment",
-        thread: "thread-123",
-        user_id: "user-123",
-        is_deleted: false,
-        date: "2024-05-10T17:15:31.573Z",
-      });
-
-      // Action
-      const result = await commentRepositoryPostgres.getComment("comment-789");
-
-      // Assert
-      expect(result).toHaveLength(1);
-      expect(result[0].id).toBe("comment-789");
-      expect(result[0].content).toBe("This is a comment");
     });
   });
 
@@ -232,7 +213,7 @@ describe("CommentRepositoryPostgres", () => {
         id: "comment-222",
         content: "Comment 2",
         thread_id: "thread-123",
-        user_id: "user-456",
+        user_id: "user-123",
         is_deleted: false,
         date: "2024-05-10T18:15:31.573Z",
       });
@@ -244,8 +225,19 @@ describe("CommentRepositoryPostgres", () => {
 
       // Assert
       expect(comments).toHaveLength(2);
-      expect(comments[0].id).toBe("comment-111");
-      expect(comments[1].id).toBe("comment-222");
+      expect(comments[0].id).toBe("comment-222");
+      expect(comments[0].user_id).toBe("user-123");
+      expect(comments[0].content).toBe("Comment 2");
+      expect(comments[0].is_deleted).toBe(false);
+      expect(comments[0].username).toBe("dicoding");
+      expect(comments[0].date).toBeDefined();
+
+      expect(comments[1].id).toBe("comment-111");
+      expect(comments[1].user_id).toBe("user-123");
+      expect(comments[1].content).toBe("Comment 1");
+      expect(comments[1].is_deleted).toBe(false);
+      expect(comments[1].username).toBe("dicoding");
+      expect(comments[1].date).toBeDefined();
     });
   });
 });

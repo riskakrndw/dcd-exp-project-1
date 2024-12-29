@@ -3,7 +3,6 @@ const pool = require("../../database/postgres/pool");
 const AddThread = require("../../../Domains/threads/entities/AddThread");
 const ThreadRepositoryPostgres = require("../ThreadRepositoryPostgres");
 const UsersTableTestHelper = require("../../../../tests/UsersTableTestHelper");
-const CommentsTableTestHelper = require("../../../../tests/CommentsTableTestHelper");
 const NotFoundError = require("../../../Commons/exceptions/NotFoundError");
 
 describe("ThreadRepositoryPostgres", () => {
@@ -35,7 +34,6 @@ describe("ThreadRepositoryPostgres", () => {
       const addThread = new AddThread({
         title: "New Thread",
         body: "New Thread body",
-        user_id: "user-456",
       });
       const fakeIdGenerator = () => "123";
       const threadRepositoryPostgres = new ThreadRepositoryPostgres(
@@ -48,7 +46,7 @@ describe("ThreadRepositoryPostgres", () => {
       );
 
       // Action
-      await threadRepositoryPostgres.addThread(
+      const createdThread = await threadRepositoryPostgres.addThread(
         addThread,
         usersBeforeThread[0].id
       );
@@ -56,16 +54,25 @@ describe("ThreadRepositoryPostgres", () => {
       // Assert
       const thread = await ThreadsTableTestHelper.findThreadById("thread-123");
 
+      expect(createdThread.id).toBe("thread-123");
+      expect(createdThread.user_id).toBe("user-456");
+      expect(createdThread.title).toBe(addThread.title);
+      expect(createdThread.body).toBe(addThread.body);
+      expect(new Date(createdThread.date).toISOString()).toBeTruthy();
+
       expect(thread).toHaveLength(1);
       expect(thread[0].id).toBe("thread-123");
+      expect(thread[0].user_id).toBe("user-456");
       expect(thread[0].title).toBe(addThread.title);
       expect(thread[0].body).toBe(addThread.body);
-      expect(thread[0].user_id).toBe("user-456");
+      expect(new Date(thread[0].date).toISOString()).toBe(
+        new Date(thread[0].date).toISOString()
+      );
     });
   });
 
   describe("getThread function", () => {
-    it("should persist get thread", async () => {
+    it("should return detail from thread", async () => {
       const fakeIdGenerator = () => "123";
       const threadRepositoryPostgres = new ThreadRepositoryPostgres(
         pool,
@@ -83,14 +90,14 @@ describe("ThreadRepositoryPostgres", () => {
 
       // Action
       const thread = await threadRepositoryPostgres.getThread(addThread.id);
-      const user = await UsersTableTestHelper.findUsersById(addThread.user_id);
 
       // Assert
       await expect(thread).toHaveLength(1);
       await expect(thread[0].id).toBe(addThread.id);
       await expect(thread[0].title).toBe(addThread.title);
       await expect(thread[0].body).toBe(addThread.body);
-      await expect(thread[0].username).toBe(user[0].username);
+      await expect(thread[0].username).toBe("dicoding");
+      await expect(thread[0].date).toBeDefined();
     });
   });
 

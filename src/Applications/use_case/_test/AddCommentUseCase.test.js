@@ -21,6 +21,8 @@ describe("AddCommentUseCase", () => {
     const mockUser = {
       id: "user-123",
       username: "testuser",
+      password: "secret",
+      fullname: "testuser",
     };
 
     /** creating dependency of use case */

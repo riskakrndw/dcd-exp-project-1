@@ -75,7 +75,10 @@ describe("ReplyRepositoryPostgres", () => {
       expect(replies).toHaveLength(1);
       expect(replies[0].id).toBe("comment-789");
       expect(replies[0].content).toBe("New Reply");
+      expect(replies[0].user_id).toBe("user-123");
+      expect(replies[0].is_deleted).toBe(false);
       expect(replies[0].username).toBe(user[0].username);
+      expect(replies[0].date).toBeDefined();
     });
   });
 
@@ -90,15 +93,24 @@ describe("ReplyRepositoryPostgres", () => {
       );
 
       // Action
-      await replyRepositoryPostgres.addReply(
+      const createdReply = await replyRepositoryPostgres.addReply(
         addReply,
         "thread-123",
         "comment-456",
         "user-123"
       );
+
       const reply = await RepliesTableTestHelper.findReplyById("comment-789");
 
       // Assert
+
+      expect(createdReply.id).toBe("comment-456");
+      expect(createdReply.user_id).toBe("user-123");
+      expect(createdReply.thread_id).toBe("thread-123");
+      expect(createdReply.parent_id).toBe("comment-456");
+      expect(createdReply.content).toBe("New Reply");
+      expect(createdReply.date).toBeDefined();
+
       expect(reply).toHaveLength(1);
       expect(reply[0].id).toBe("comment-789");
       expect(reply[0].user_id).toBe("user-123");
@@ -205,7 +217,7 @@ describe("ReplyRepositoryPostgres", () => {
         pool,
         fakeIdGenerator
       );
-      await replyRepositoryPostgres.addReply(
+      const createdReply = await replyRepositoryPostgres.addReply(
         addReply,
         "thread-123",
         "comment-456",
@@ -213,6 +225,13 @@ describe("ReplyRepositoryPostgres", () => {
       );
 
       // Action & Assert
+      expect(createdReply.id).toBe("comment-123");
+      expect(createdReply.user_id).toBe("user-456");
+      expect(createdReply.thread_id).toBe("thread-123");
+      expect(createdReply.parent_id).toBe("comment-456");
+      expect(createdReply.content).toBe("New Reply");
+      expect(createdReply.date).toBeDefined();
+
       const result = await replyRepositoryPostgres.deleteReply("comment-xxx");
       await expect(result.rowCount).toEqual(0);
     });
@@ -225,7 +244,7 @@ describe("ReplyRepositoryPostgres", () => {
         pool,
         fakeIdGenerator
       );
-      await replyRepositoryPostgres.addReply(
+      const createdReply = await replyRepositoryPostgres.addReply(
         addReply,
         "thread-123",
         "comment-456",
@@ -236,6 +255,13 @@ describe("ReplyRepositoryPostgres", () => {
       await replyRepositoryPostgres.deleteReply("comment-789");
 
       // Assert
+      expect(createdReply.id).toBe("comment-123");
+      expect(createdReply.user_id).toBe("user-123");
+      expect(createdReply.thread_id).toBe("thread-123");
+      expect(createdReply.parent_id).toBe("comment-456");
+      expect(createdReply.content).toBe("New Reply");
+      expect(createdReply.date).toBeDefined();
+
       const replyDeleted = await RepliesTableTestHelper.findReplyById(
         "comment-789"
       );

@@ -52,9 +52,13 @@ describe("UserRepositoryPostgres", () => {
       );
 
       // Action
-      await userRepositoryPostgres.addUser(registerUser);
+      const createdUser = await userRepositoryPostgres.addUser(registerUser);
 
       // Assert
+      expect(createdUser.id).toBe("user-123");
+      expect(createdUser.username).toBe("dicoding");
+      expect(createdUser.fullname).toBe("Dicoding Indonesia");
+
       const users = await UsersTableTestHelper.findUsersById("user-123");
       expect(users).toHaveLength(1);
     });

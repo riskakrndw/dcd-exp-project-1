@@ -1,4 +1,3 @@
-const NotFoundError = require("../../Commons/exceptions/NotFoundError");
 const CommentedThread = require("../../Domains/threads/entities/CommentedThread");
 
 class GetThreadUseCase {
@@ -10,10 +9,6 @@ class GetThreadUseCase {
 
   async execute(threadId) {
     const getThread = await this._threadRepository.getThread(threadId);
-
-    if (getThread.length === 0) {
-      throw new NotFoundError("Thread tidak ditemukan");
-    }
 
     const getComments = await this._commentRepository.getComments(threadId);
 

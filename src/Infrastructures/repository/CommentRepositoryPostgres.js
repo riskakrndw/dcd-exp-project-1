@@ -22,18 +22,6 @@ class CommentRepositoryPostgres extends CommentRepository {
     return rows[0];
   }
 
-  async getComment(commentId) {
-    const query = {
-      text: `SELECT *
-            FROM comments as c
-            WHERE c.id = $1`,
-      values: [commentId],
-    };
-
-    const { rows } = await this._pool.query(query);
-    return rows;
-  }
-
   async deleteComment(commentId) {
     const query = {
       text: "UPDATE comments SET is_deleted = TRUE WHERE id = $1",
