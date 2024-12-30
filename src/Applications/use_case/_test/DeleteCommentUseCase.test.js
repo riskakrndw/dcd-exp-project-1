@@ -37,8 +37,12 @@ describe("DeleteCommentUseCase", () => {
     mockCommentRepository.isCommentExist = jest
       .fn()
       .mockResolvedValue(mockComment);
-    mockCommentRepository.isCommentByOwner = jest.fn().mockResolvedValue();
-    mockCommentRepository.deleteComment = jest.fn().mockResolvedValue();
+    mockCommentRepository.isCommentByOwner = jest
+      .fn()
+      .mockResolvedValue(mockComment);
+    mockCommentRepository.deleteComment = jest
+      .fn()
+      .mockResolvedValue(mockComment);
 
     /** creating use case instance */
     const deleteCommentUseCase = new DeleteCommentUseCase({

@@ -46,9 +46,19 @@ describe("AddReplyUseCase", () => {
       content: "New reply",
     };
 
+    const mockThread = {
+      id: "thread-123",
+      title: "New Thread 123",
+      body: "New thread body 123",
+      user_id: "user-456",
+      date: new Date(),
+    };
+
     const mockThreadRepository = new ThreadRepository();
     const mockCommentRepository = new CommentRepository();
-    mockThreadRepository.isThreadExist = jest.fn().mockResolvedValue();
+    mockThreadRepository.isThreadExist = jest
+      .fn()
+      .mockResolvedValue(mockThread);
     mockCommentRepository.isCommentExist = jest
       .fn()
       .mockRejectedValue(new NotFoundError("komentar tidak ditemukan"));
