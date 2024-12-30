@@ -23,11 +23,12 @@ describe("DeleteCommentUseCase", () => {
 
     const mockComment = {
       id: "comment-123",
-      content: "New Comment from user-456",
-      thread: "thread-123",
       user_id: "user-123",
-      is_deleted: false,
+      thread_id: "thread-123",
+      parent_id: null,
+      content: "New Comment from user-456",
       date: "2024-05-10T17:15:31.573Z",
+      is_deleted: false,
     };
 
     /** mocking needed function */
