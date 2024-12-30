@@ -37,9 +37,17 @@ describe("DeleteReplyUseCase", () => {
     const mockThreadRepository = new ThreadRepository();
     const mockCommentRepository = new CommentRepository();
 
+    const mockThread = {
+      id: "thread-123",
+      title: "New Thread 123",
+      body: "New thread body 123",
+      user_id: "user-456",
+      date: new Date(),
+    };
+
     mockThreadRepository.isThreadExist = jest
       .fn()
-      .mockImplementation(() => Promise.resolve());
+      .mockImplementation(() => Promise.resolve(mockThread));
     mockCommentRepository.isCommentExist = jest.fn().mockImplementation(() => {
       throw new NotFoundError("komentar tidak ditemukan");
     });
@@ -74,13 +82,30 @@ describe("DeleteReplyUseCase", () => {
     const mockCommentRepository = new CommentRepository();
     const mockReplyRepository = new ReplyRepository();
 
+    const mockThread = {
+      id: "thread-123",
+      title: "New Thread 123",
+      body: "New thread body 123",
+      user_id: "user-456",
+      date: new Date(),
+    };
+
+    const mockComment = {
+      id: "comment-123",
+      content: "New Comment from user-456",
+      thread: "thread-123",
+      user_id: "user-123",
+      is_deleted: false,
+      date: "2024-05-10T17:15:31.573Z",
+    };
+
     /** mocking needed function */
     mockThreadRepository.isThreadExist = jest
       .fn()
-      .mockImplementation(() => Promise.resolve());
+      .mockImplementation(() => Promise.resolve(mockThread));
     mockCommentRepository.isCommentExist = jest
       .fn()
-      .mockImplementation(() => Promise.resolve());
+      .mockImplementation(() => Promise.resolve(mockComment));
     mockReplyRepository.isReplyExist = jest.fn().mockImplementation(() => {
       throw new NotFoundError("balasan tidak ditemukan");
     });
@@ -118,16 +143,42 @@ describe("DeleteReplyUseCase", () => {
     const mockCommentRepository = new CommentRepository();
     const mockReplyRepository = new ReplyRepository();
 
+    const mockThread = {
+      id: "thread-123",
+      title: "New Thread 123",
+      body: "New thread body 123",
+      user_id: "user-456",
+      date: new Date(),
+    };
+
+    const mockComment = {
+      id: "comment-123",
+      user_id: "user-123",
+      thread_id: "thread-123",
+      content: "New Comment from user-456",
+      date: "2024-05-10T17:15:31.573Z",
+      is_deleted: false,
+    };
+
+    const mockReply = {
+      id: "reply-123",
+      user_id: "user-123",
+      thread_id: "thread-123",
+      parent_id: "comment-456",
+      content: "New Reply",
+      date: "2024-05-10T17:15:31.573Z",
+    };
+
     /** mocking needed function */
     mockThreadRepository.isThreadExist = jest
       .fn()
-      .mockImplementation(() => Promise.resolve());
+      .mockImplementation(() => Promise.resolve(mockThread));
     mockCommentRepository.isCommentExist = jest
       .fn()
-      .mockImplementation(() => Promise.resolve());
+      .mockImplementation(() => Promise.resolve(mockComment));
     mockReplyRepository.isReplyExist = jest
       .fn()
-      .mockImplementation(() => Promise.resolve());
+      .mockImplementation(() => Promise.resolve(mockReply));
     mockReplyRepository.isOwnerReplied = jest.fn().mockImplementation(() => {
       throw new AuthorizationError("tidak berhak menghapus balasan");
     });
@@ -169,22 +220,48 @@ describe("DeleteReplyUseCase", () => {
     const mockCommentRepository = new CommentRepository();
     const mockReplyRepository = new ReplyRepository();
 
+    const mockThread = {
+      id: "thread-123",
+      title: "New Thread 123",
+      body: "New thread body 123",
+      user_id: "user-456",
+      date: new Date(),
+    };
+
+    const mockComment = {
+      id: "comment-123",
+      content: "New Comment from user-456",
+      thread: "thread-123",
+      user_id: "user-123",
+      is_deleted: false,
+      date: "2024-05-10T17:15:31.573Z",
+    };
+
+    const mockReply = {
+      id: "reply-123",
+      user_id: "user-123",
+      thread_id: "thread-123",
+      parent_id: "comment-456",
+      content: "New Reply",
+      date: "2024-05-10T17:15:31.573Z",
+    };
+
     /** mocking needed function */
     mockThreadRepository.isThreadExist = jest
       .fn()
-      .mockImplementation(() => Promise.resolve());
+      .mockImplementation(() => Promise.resolve(mockThread));
     mockCommentRepository.isCommentExist = jest
       .fn()
-      .mockImplementation(() => Promise.resolve());
+      .mockImplementation(() => Promise.resolve(mockComment));
     mockReplyRepository.isReplyExist = jest
       .fn()
-      .mockImplementation(() => Promise.resolve());
+      .mockImplementation(() => Promise.resolve(mockReply));
     mockReplyRepository.isOwnerReplied = jest
       .fn()
-      .mockImplementation(() => Promise.resolve());
+      .mockImplementation(() => Promise.resolve(mockReply));
     mockReplyRepository.deleteReply = jest
       .fn()
-      .mockImplementation(() => Promise.resolve());
+      .mockImplementation(() => Promise.resolve(mockReply));
 
     /** creating use case */
     const deleteReplyUseCase = new DeleteReplyUseCase({

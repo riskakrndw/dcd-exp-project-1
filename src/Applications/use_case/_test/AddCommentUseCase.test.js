@@ -4,6 +4,7 @@ const CommentRepository = require("../../../Domains/comments/CommentRepository")
 const AddCommentUseCase = require("../AddCommentUseCase");
 const ThreadRepository = require("../../../Domains/threads/ThreadRepository");
 const UserRepository = require("../../../Domains/users/UserRepository");
+const { date } = require("joi");
 
 describe("AddCommentUseCase", () => {
   it("should orchestrating the add comment action correctly", async () => {
@@ -13,6 +14,13 @@ describe("AddCommentUseCase", () => {
     };
     const threadId = "thread-123";
     const ownerId = "user-123";
+    const mockThread = {
+      id: "thread-123",
+      title: "New Thread 123",
+      body: "New thread body 123",
+      user_id: "user-456",
+      date: new Date(),
+    };
     const mockAddedComment = {
       id: "comment-123",
       user_id: "user-123",
@@ -34,7 +42,7 @@ describe("AddCommentUseCase", () => {
 
     mockThreadRepository.isThreadExist = jest
       .fn()
-      .mockImplementation(async () => Promise.resolve());
+      .mockImplementation(async () => Promise.resolve(mockThread));
     mockCommentRepository.addComment = jest
       .fn()
       .mockImplementation(() => Promise.resolve(mockAddedComment));

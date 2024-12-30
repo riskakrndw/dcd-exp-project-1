@@ -99,14 +99,34 @@ describe("AddReplyUseCase", () => {
       password: "secret",
       fullname: "testuser",
     };
+    const mockThread = {
+      id: "thread-123",
+      title: "New Thread 123",
+      body: "New thread body 123",
+      user_id: "user-456",
+      date: new Date(),
+    };
+
+    const mockComment = {
+      id: "comment-123",
+      content: "New Comment from user-456",
+      thread: "thread-123",
+      user_id: "user-123",
+      is_deleted: false,
+      date: "2024-05-10T17:15:31.573Z",
+    };
 
     const mockThreadRepository = new ThreadRepository();
     const mockCommentRepository = new CommentRepository();
     const mockReplyRepository = new ReplyRepository();
     const mockUserRepository = new UserRepository();
 
-    mockThreadRepository.isThreadExist = jest.fn().mockResolvedValue();
-    mockCommentRepository.isCommentExist = jest.fn().mockResolvedValue();
+    mockThreadRepository.isThreadExist = jest
+      .fn()
+      .mockResolvedValue(mockThread);
+    mockCommentRepository.isCommentExist = jest
+      .fn()
+      .mockResolvedValue(mockComment);
     mockReplyRepository.addReply = jest.fn().mockResolvedValue(mockAddedReply);
     mockUserRepository.getUser = jest.fn().mockResolvedValue(mockUser);
 
