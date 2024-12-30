@@ -27,7 +27,7 @@ describe("DeleteCommentUseCase", () => {
       thread_id: "thread-123",
       parent_id: null,
       content: "New Comment from user-456",
-      date: "2024-05-10T17:15:31.573Z",
+      date: new Date("2024-05-10T17:15:31.573Z"),
       is_deleted: false,
     };
 

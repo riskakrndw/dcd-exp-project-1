@@ -18,7 +18,7 @@ describe("AddThreadUseCase", () => {
       user_id: "user-123",
       title: useCasePayload.title,
       body: useCasePayload.body,
-      date: "2021-08-08T07:19:09.775Z",
+      date: new Date("2021-08-08T07:19:09.775Z"),
     };
 
     const mockUser = {
