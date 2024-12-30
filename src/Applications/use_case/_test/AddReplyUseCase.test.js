@@ -58,7 +58,7 @@ describe("AddReplyUseCase", () => {
     const mockCommentRepository = new CommentRepository();
     mockThreadRepository.isThreadExist = jest
       .fn()
-      .mockResolvedValue(mockThread);
+      .mockImplementation(() => Promise.resolve(mockThread));
     mockCommentRepository.isCommentExist = jest
       .fn()
       .mockRejectedValue(new NotFoundError("komentar tidak ditemukan"));
@@ -134,12 +134,16 @@ describe("AddReplyUseCase", () => {
 
     mockThreadRepository.isThreadExist = jest
       .fn()
-      .mockResolvedValue(mockThread);
+      .mockImplementation(() => Promise.resolve(mockThread));
     mockCommentRepository.isCommentExist = jest
       .fn()
-      .mockResolvedValue(mockComment);
-    mockReplyRepository.addReply = jest.fn().mockResolvedValue(mockAddedReply);
-    mockUserRepository.getUser = jest.fn().mockResolvedValue(mockUser);
+      .mockImplementation(() => Promise.resolve(mockComment));
+    mockReplyRepository.addReply = jest
+      .fn()
+      .mockImplementation(() => Promise.resolve(mockAddedReply));
+    mockUserRepository.getUser = jest
+      .fn()
+      .mockImplementation(() => Promise.resolve(mockUser));
 
     const addReplyUseCase = new AddReplyUseCase({
       threadRepository: mockThreadRepository,

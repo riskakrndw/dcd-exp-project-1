@@ -137,11 +137,15 @@ describe("GetThreadUseCase", () => {
     const mockCommentRepository = new CommentRepository();
     const mockReplyRepository = new ReplyRepository();
 
-    mockThreadRepository.getThread = jest.fn().mockResolvedValue([mockThread]);
+    mockThreadRepository.getThread = jest
+      .fn()
+      .mockImplementation(() => Promise.resolve([mockThread]));
     mockCommentRepository.getComments = jest
       .fn()
-      .mockResolvedValue(mockComments);
-    mockReplyRepository.getReplies = jest.fn().mockResolvedValue(mockReplies);
+      .mockImplementation(() => Promise.resolve(mockComments));
+    mockReplyRepository.getReplies = jest
+      .fn()
+      .mockImplementation(() => Promise.resolve(mockReplies));
 
     const getThreadUseCase = new GetThreadUseCase({
       threadRepository: mockThreadRepository,
@@ -215,11 +219,15 @@ describe("GetThreadUseCase", () => {
     const mockCommentRepository = new CommentRepository();
     const mockReplyRepository = new ReplyRepository();
 
-    mockThreadRepository.getThread = jest.fn().mockResolvedValue([mockThread]);
+    mockThreadRepository.getThread = jest
+      .fn()
+      .mockImplementation(() => Promise.resolve([mockThread]));
     mockCommentRepository.getComments = jest
       .fn()
-      .mockResolvedValue(mockComments);
-    mockReplyRepository.getReplies = jest.fn().mockResolvedValue(mockReplies);
+      .mockImplementation(() => Promise.resolve(mockComments));
+    mockReplyRepository.getReplies = jest
+      .fn()
+      .mockImplementation(() => Promise.resolve(mockReplies));
 
     const getThreadUseCase = new GetThreadUseCase({
       threadRepository: mockThreadRepository,
@@ -270,24 +278,28 @@ describe("GetThreadUseCase", () => {
     const mockReplyRepository = new ReplyRepository();
 
     // Mock dependencies
-    mockThreadRepository.getThread = jest.fn().mockResolvedValue([
-      {
-        id: threadId,
-        title: "sebuah thread",
-        body: "sebuah body thread",
-        date: new Date("2021-08-08T07:19:09.775Z"),
-        username: "dicoding",
-      },
-    ]);
-    mockCommentRepository.getComments = jest.fn().mockResolvedValue([
-      {
-        id: "comment-123",
-        username: "johndoe",
-        date: new Date("2021-08-08T07:22:33.555Z"),
-        content: "sebuah komentar",
-        is_deleted: false,
-      },
-    ]);
+    mockThreadRepository.getThread = jest.fn().mockImplementation(() =>
+      Promise.resolve([
+        {
+          id: threadId,
+          title: "sebuah thread",
+          body: "sebuah body thread",
+          date: new Date("2021-08-08T07:19:09.775Z"),
+          username: "dicoding",
+        },
+      ])
+    );
+    mockCommentRepository.getComments = jest.fn().mockImplementation(() =>
+      Promise.resolve([
+        {
+          id: "comment-123",
+          username: "johndoe",
+          date: new Date("2021-08-08T07:22:33.555Z"),
+          content: "sebuah komentar",
+          is_deleted: false,
+        },
+      ])
+    );
     // Simulate failure in fetching replies
     mockReplyRepository.getReplies = jest
       .fn()

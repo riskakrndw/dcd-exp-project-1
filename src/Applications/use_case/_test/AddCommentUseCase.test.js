@@ -46,7 +46,9 @@ describe("AddCommentUseCase", () => {
     mockCommentRepository.addComment = jest
       .fn()
       .mockImplementation(() => Promise.resolve(mockAddedComment));
-    mockUserRepository.getUser = jest.fn().mockResolvedValue(mockUser);
+    mockUserRepository.getUser = jest
+      .fn()
+      .mockImplementation(() => Promise.resolve(mockUser));
 
     const addCommentUseCase = new AddCommentUseCase({
       threadRepository: mockThreadRepository,
