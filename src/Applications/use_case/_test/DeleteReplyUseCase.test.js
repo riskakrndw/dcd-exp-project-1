@@ -169,6 +169,7 @@ describe("DeleteReplyUseCase", () => {
       parent_id: "comment-456",
       content: "New Reply",
       date: new Date("2024-05-10T17:15:31.573Z"),
+      is_deleted: false,
     };
 
     /** mocking needed function */
@@ -247,6 +248,7 @@ describe("DeleteReplyUseCase", () => {
       parent_id: "comment-456",
       content: "New Reply",
       date: new Date("2024-05-10T17:15:31.573Z"),
+      is_deleted: false,
     };
 
     /** mocking needed function */
