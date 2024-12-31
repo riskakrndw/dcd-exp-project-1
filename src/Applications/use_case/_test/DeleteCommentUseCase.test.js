@@ -15,9 +15,9 @@ describe("DeleteCommentUseCase", () => {
 
     const mockThread = {
       id: "thread-123",
+      user_id: "user-456",
       title: "New Thread 123",
       body: "New thread body 123",
-      user_id: "user-456",
       date: new Date(),
     };
 

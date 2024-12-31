@@ -14,8 +14,8 @@ describe("GetThreadUseCase", () => {
       id: threadId,
       title: "sebuah thread",
       body: "sebuah body thread",
-      date: new Date("2021-08-08T07:19:09.775Z"),
       username: "dicoding",
+      date: new Date("2021-08-08T07:19:09.775Z"),
     };
 
     const mockComments = [
@@ -33,16 +33,18 @@ describe("GetThreadUseCase", () => {
       {
         id: "reply-1",
         content: "sebuah balasan",
-        date: new Date("2021-08-08T08:07:01.522Z"),
-        username: "dicoding",
+        user_id: "user-456",
         is_deleted: false,
+        username: "dicoding",
+        date: new Date("2021-08-08T08:07:01.522Z"),
       },
       {
         id: "reply-2",
         content: "sebuah balasan",
-        date: null,
-        username: "dicoding",
+        user_id: "user-456",
         is_deleted: false,
+        username: "dicoding",
+        date: null,
       },
     ];
 
@@ -116,8 +118,8 @@ describe("GetThreadUseCase", () => {
       id: threadId,
       title: "sebuah thread",
       body: "sebuah body thread",
-      date: new Date("2021-08-08T07:19:09.775Z"),
       username: "dicoding",
+      date: new Date("2021-08-08T07:19:09.775Z"),
     };
 
     const mockComments = [
@@ -190,8 +192,8 @@ describe("GetThreadUseCase", () => {
       id: threadId,
       title: "sebuah thread",
       body: "sebuah body thread",
-      date: new Date("2021-08-08T07:19:09.775Z"),
       username: "dicoding",
+      date: new Date("2021-08-08T07:19:09.775Z"),
     };
 
     const mockComments = [
@@ -209,9 +211,10 @@ describe("GetThreadUseCase", () => {
       {
         id: "reply-1",
         content: "",
-        date: new Date("2021-08-08T08:07:01.522Z"),
-        username: "dicoding",
+        user_id: "user-456",
         is_deleted: true,
+        username: "dicoding",
+        date: new Date("2021-08-08T08:07:01.522Z"),
       },
     ];
 
@@ -284,8 +287,8 @@ describe("GetThreadUseCase", () => {
           id: threadId,
           title: "sebuah thread",
           body: "sebuah body thread",
-          date: new Date("2021-08-08T07:19:09.775Z"),
           username: "dicoding",
+          date: new Date("2021-08-08T07:19:09.775Z"),
         },
       ])
     );
@@ -293,10 +296,11 @@ describe("GetThreadUseCase", () => {
       Promise.resolve([
         {
           id: "comment-123",
-          username: "johndoe",
-          date: new Date("2021-08-08T07:22:33.555Z"),
+          user_id: "user-123",
           content: "sebuah komentar",
           is_deleted: false,
+          username: "johndoe",
+          date: new Date("2021-08-08T07:22:33.555Z"),
         },
       ])
     );

@@ -48,9 +48,9 @@ describe("AddReplyUseCase", () => {
 
     const mockThread = {
       id: "thread-123",
+      user_id: "user-456",
       title: "New Thread 123",
       body: "New thread body 123",
-      user_id: "user-456",
       date: new Date(),
     };
 
@@ -100,8 +100,12 @@ describe("AddReplyUseCase", () => {
 
     const mockAddedReply = new AddedReply({
       id: "reply-123",
+      user_id: "user-123",
+      thread_id: "thread-123",
+      parent_id: "comment-123",
       content: useCasePayload.content,
-      owner: "user-123",
+      date: new Date("2024-05-10T17:15:31.573Z"),
+      owner: "testuser",
     });
     const mockUser = {
       id: "user-123",
@@ -111,9 +115,9 @@ describe("AddReplyUseCase", () => {
     };
     const mockThread = {
       id: "thread-123",
+      user_id: "user-456",
       title: "New Thread 123",
       body: "New thread body 123",
-      user_id: "user-456",
       date: new Date(),
     };
 

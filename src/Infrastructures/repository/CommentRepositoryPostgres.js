@@ -24,7 +24,7 @@ class CommentRepositoryPostgres extends CommentRepository {
 
   async deleteComment(commentId) {
     const query = {
-      text: "UPDATE comments SET is_deleted = TRUE WHERE id = $1 RETURNING id, user_id, thread_id,  content, date, is_deleted",
+      text: "UPDATE comments SET is_deleted = TRUE WHERE id = $1 RETURNING id, user_id, thread_id, parent_id, content, date, is_deleted",
       values: [commentId],
     };
 
@@ -81,6 +81,7 @@ class CommentRepositoryPostgres extends CommentRepository {
         WHERE 
           c.thread_id = $1
           AND c.parent_id IS NULL  
+        ORDER BY c.date ASC
       `,
       values: [threadId],
     };
